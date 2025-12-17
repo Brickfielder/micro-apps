@@ -1,0 +1,1 @@
+importScripts('./offline/sw.js');
