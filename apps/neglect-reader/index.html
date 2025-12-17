@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Left-Anchor Reader — Visuo-Spatial Neglect Trainer</title>
+  <meta name="description" content="Read a short story with optional left-attentional anchors." />
+  <link rel="stylesheet" href="../shared/shell/shell.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main id="app-root">
+    <section id="stage-intro" class="stage active" aria-labelledby="intro-heading">
+      <div class="screen-content">
+        <h1 id="intro-heading">📖 Left-Anchor Reader</h1>
+        <p>
+          This reading exercise is designed to help with Visuo-Spatial Neglect. You will read a short story across several pages.
+        </p>
+        <div class="instructions-box">
+          <strong>Instructions:</strong><br />
+          1. Use the toolbar to select a visual cue if needed (Red Stripe, Sweeping Light, or Highlighted Words).<br />
+          2. Read carefully from left to right.<br />
+          3. Swipe or click "Next" to turn the page.
+        </div>
+        <button class="btn primary full-width" id="startBtn">Start Reading</button>
+      </div>
+    </section>
+
+    <section id="stage-task" class="stage" aria-live="polite">
+      <div class="toolbar" role="group" aria-label="Support mode">
+        <span class="mode-label">Support:</span>
+        <div class="segmented" id="modeControl">
+          <input type="radio" id="mode-none" name="mode" value="none" checked />
+          <label for="mode-none" title="No external support">None</label>
+
+          <input type="radio" id="mode-stripe" name="mode" value="stripe" />
+          <label for="mode-stripe" title="Pulsating red stripe on the left">Left stripe</label>
+
+          <input type="radio" id="mode-sweep" name="mode" value="sweep" />
+          <label for="mode-sweep" title="Right-to-left sweeping light">Sweep</label>
+
+          <input type="radio" id="mode-firstwords" name="mode" value="firstwords" />
+          <label for="mode-firstwords" title="Colour the first two words on each line">Lead-words</label>
+        </div>
+      </div>
+
+      <section class="reader mode-none" id="reader" aria-label="Reading area">
+        <div class="left-stripe" aria-hidden="true"></div>
+        <div class="sweep" aria-hidden="true"></div>
+
+        <h2 class="title">The River's Memory</h2>
+
+        <div class="pages" id="pages" tabindex="0" aria-label="Story pages">
+          <article class="page current" data-index="0">
+            <p>
+              On the edge of a quiet village, a boy named Leo often sat by the river after school, skipping stones and talking to himself about the day’s little dramas. One afternoon, an old man appeared on the opposite bank, fishing with a rod so worn it looked older than Leo’s grandparents. For a while, they just nodded at each other across the water, strangers bound by the same silence. Then the man called out, “You’re throwing them too flat—let the stone breathe before it flies.” Leo tried again, and the stone danced five times before sinking. The old man smiled, and from that day, they met there most evenings.
+            </p>
+          </article>
+
+          <article class="page" data-index="1">
+            <p>
+              The old man’s name was Arthur. He had been a carpenter once, a widower now, his stories shaped by both laughter and ache. Leo would bring his homework, and Arthur would bring tales of his youth—of building boats, of losing a friend in the war, of the first time he held his newborn daughter. Sometimes, they spoke little. Sometimes, they said everything without needing words. Leo started to notice how the sun seemed to linger a little longer when Arthur laughed, how the world felt smaller and kinder when they sat side by side.
+            </p>
+          </article>
+
+          <article class="page" data-index="2">
+            <p>
+              When winter came and the river froze, Arthur stopped coming. Leo crossed the bridge and found the old house shuttered, the chair by the hearth empty but warm with memory. He sat by the fire, holding a small wooden boat Arthur had carved for him weeks before, its hull smooth as a wish. Years later, when Leo was grown and teaching his own son to skip stones, he told him, “Let the stone breathe before it flies.” And as the boy’s laughter echoed across the water, Leo smiled—because the river still remembered.
+            </p>
+          </article>
+        </div>
+
+        <div class="pager" aria-live="polite">
+          <span id="pageStatus" class="hint">Page 1 of 3</span>
+          <div class="buttons">
+            <button class="btn" id="prevBtn" aria-label="Previous page" disabled>← Prev</button>
+            <button class="btn primary" id="nextBtn" aria-label="Next page">Next →</button>
+          </div>
+        </div>
+      </section>
+
+      <button class="btn primary next-fab" id="fabNext" aria-label="Next page">➜</button>
+    </section>
+
+    <section id="stage-debrief" class="stage" aria-labelledby="debrief-heading">
+      <div class="screen-content">
+        <h1 id="debrief-heading">Session Complete</h1>
+        <p>Great job reading through the story.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-val" id="res-time">0:00</span>
+            <span class="stat-lbl">Time Taken</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-val" id="res-mode">None</span>
+            <span class="stat-lbl">Mode Used</span>
+          </div>
+        </div>
+
+        <div class="comment-block">
+          <label class="comment-label" for="clinicianComment">Clinician comment</label>
+          <textarea
+            id="clinicianComment"
+            name="clinicianComment"
+            class="comment-area"
+            placeholder="Add any observations or follow-up notes here..."
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div class="footer-actions">
+          <button class="btn" id="restartBtn">Restart</button>
+          <button class="btn primary" id="exportBtn">Export Result</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
