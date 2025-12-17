@@ -333,9 +333,7 @@
   }
 
   function confirmTopUp(network) {
-    updateScreen('TOP UP', `${network} top up successful`, {
-      R4: { label: 'Main Menu', action: showMainMenu },
-    });
+    endSession(true, `${network} top up successful`);
   }
 
   function startPinChangeFlow() {
@@ -382,10 +380,7 @@
       if (state.pinBuffer === state.pinChange.temp) {
         state.activeCardPin = state.pinBuffer;
         state.pinBuffer = '';
-        state.step = 'menu';
-        updateScreen('PIN UPDATED', 'Your PIN has been changed successfully.', {
-          R4: { label: 'Main Menu', action: showMainMenu },
-        });
+        endSession(true, 'PIN changed successfully');
       } else {
         state.pinBuffer = '';
         state.pinChange.stage = 'new';
