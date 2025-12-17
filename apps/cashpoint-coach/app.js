@@ -302,7 +302,7 @@
   }
 
   function startWithdraw(defaultAmount) {
-    const labelFor = (amount) => (defaultAmount === amount ? `£${amount} (Scenario)` : `£${amount}`);
+    const labelFor = (amount) => `£${amount}`;
 
     const options = {
       R1: { label: labelFor(50), action: () => dispenseCash(50) },
