@@ -61,6 +61,17 @@ body {
   text-align: center;
 }
 
+.instruction-icon {
+  font-size: 44px;
+  margin-bottom: 0.35rem;
+}
+
+.instruction-desc {
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.8rem;
+}
+
 .screen-content h1 {
   margin-bottom: 1rem;
   color: var(--text-main);
@@ -72,13 +83,32 @@ body {
   margin-bottom: 2rem;
 }
 
-.instructions-box {
+.task-panel {
   text-align: left;
-  background: var(--surface-strong);
-  padding: 1rem;
-  border-radius: 10px;
-  border: 1px solid var(--line);
+  background: #f2f2f2;
+  padding: 1.2rem 1.25rem;
+  border-radius: 12px;
+  border: none;
   margin-bottom: 1.5rem;
+  color: #212529;
+}
+
+.task-panel ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+#stage-intro .btn.primary {
+  background: #0d6efd;
+  color: #fff;
+  border-color: #0a58ca;
+  box-shadow: 0 10px 24px rgba(13, 110, 253, 0.24);
+}
+
+#stage-intro .btn.primary:hover {
+  background: #0b5ed7;
 }
 
 .stat-grid {

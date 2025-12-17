@@ -7,10 +7,84 @@
 }
 
 body {
-  background: radial-gradient(circle at 20% 10%, rgba(255, 238, 0, 0.05), transparent 35%),
-    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.08), transparent 30%),
-    radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.08), transparent 40%),
-    var(--surface);
+  background: #f6f7fb;
+}
+
+.instruction-stage {
+  background: #f6f7fb;
+  padding: 44px 16px 56px;
+}
+
+.instruction-shell {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.instruction-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  color: #212529;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.instruction-icon {
+  font-size: 44px;
+  margin-bottom: 8px;
+}
+
+.instruction-title {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 3vw, 30px);
+}
+
+.instruction-desc {
+  margin: 0 auto 18px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.task-panel {
+  background: #f2f2f2;
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: left;
+  color: #212529;
+  margin: 0 0 22px;
+  border: none;
+}
+
+.task-panel ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
+.intro-grid {
+  margin: 20px 0 10px;
+}
+
+.instruction-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.instruction-card .btn.primary {
+  background: #0d6efd;
+  color: #fff;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.9rem 1.6rem;
+  box-shadow: 0 10px 24px rgba(13, 110, 253, 0.28);
+}
+
+.instruction-card .btn.primary:hover {
+  filter: brightness(1.03);
 }
 
 .app-frame {

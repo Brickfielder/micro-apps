@@ -23,49 +23,52 @@
       </div>
     </header>
 
-    <section id="stage-intro" class="stage active" aria-labelledby="intro-heading">
-      <div class="panel">
-        <div class="panel-header">
-          <h2 id="intro-heading">Welcome to the ATM simulator</h2>
-          <p>Choose a scenario, pick your preferred mode, and start practicing secure ATM interactions.</p>
-        </div>
+    <section id="stage-intro" class="stage instruction-stage active" aria-labelledby="intro-heading">
+      <div class="instruction-shell">
+        <div class="instruction-card">
+          <div class="instruction-icon" aria-hidden="true">🏧</div>
+          <h1 class="instruction-title" id="intro-heading">Welcome to the ATM simulator</h1>
+          <p class="instruction-desc">Choose a scenario, pick your preferred mode, and start practicing secure ATM interactions.</p>
 
-        <div class="instructions-box">
-          <strong>How it works</strong>
-          <ul>
-            <li>Use the side buttons beside the screen to select on-screen options.</li>
-            <li>Enter PINs and amounts with the keypad. Cancel or clear as needed.</li>
-            <li>Click the card, cash, or receipt slots to insert or collect items.</li>
-          </ul>
-        </div>
+          <div class="task-panel" aria-label="How it works">
+            <strong>How it works</strong>
+            <ul>
+              <li>Use the side buttons beside the screen to select on-screen options.</li>
+              <li>Enter PINs and amounts with the keypad. Cancel or clear as needed.</li>
+              <li>Click the card, cash, or receipt slots to insert or collect items.</li>
+            </ul>
+          </div>
 
-        <div class="config-grid">
-          <label class="ctrl">
-            <span>Scenario</span>
-            <select id="scenario">
-              <option value="withdraw20">Withdraw £20</option>
-              <option value="balance">Check Balance</option>
-              <option value="topup">Mobile Top-up</option>
-              <option value="pin">Change PIN</option>
-            </select>
-          </label>
-          <label class="ctrl">
-            <span>Mode</span>
-            <select id="assist">
-              <option value="guided">Guided (Voice + Text)</option>
-              <option value="standard" selected>Standard</option>
-            </select>
-          </label>
-          <label class="ctrl">
-            <span>Card</span>
-            <select id="card">
-              <option value="A">Blue Card (PIN: 5241)</option>
-              <option value="B">Gold Card (PIN: 7309)</option>
-            </select>
-          </label>
-        </div>
+          <div class="config-grid intro-grid">
+            <label class="ctrl">
+              <span>Scenario</span>
+              <select id="scenario">
+                <option value="withdraw20">Withdraw £20</option>
+                <option value="balance">Check Balance</option>
+                <option value="topup">Mobile Top-up</option>
+                <option value="pin">Change PIN</option>
+              </select>
+            </label>
+            <label class="ctrl">
+              <span>Mode</span>
+              <select id="assist">
+                <option value="guided">Guided (Voice + Text)</option>
+                <option value="standard" selected>Standard</option>
+              </select>
+            </label>
+            <label class="ctrl">
+              <span>Card</span>
+              <select id="card">
+                <option value="A">Blue Card (PIN: 5241)</option>
+                <option value="B">Gold Card (PIN: 7309)</option>
+              </select>
+            </label>
+          </div>
 
-        <button id="startBtn" class="btn primary">Insert Card to Start</button>
+          <div class="instruction-actions">
+            <button id="startBtn" class="btn primary">Insert Card to Start</button>
+          </div>
+        </div>
       </div>
     </section>
 
