@@ -18,5 +18,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2024-07-01"
+  },
+  {
+    "slug": "neglect-reader",
+    "title": "Left-Anchor Reader",
+    "description": "Read a short story with optional left-attentional anchors and cues.",
+    "tags": ["attention", "therapy"],
+    "entryPath": "./apps/neglect-reader/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2024-08-01"
   }
 ]
