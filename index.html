@@ -6,337 +6,46 @@
   <title>Micro Apps | Home</title>
   <link rel="stylesheet" href="./shared/shell/shell.css" />
   <style>
-    .home-hero {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 1.5rem;
-      padding: clamp(1.25rem, 2vw, 2rem);
-      margin-bottom: 2rem;
-      background: linear-gradient(160deg, rgba(56, 189, 248, 0.16), rgba(14, 165, 233, 0.08), rgba(14, 116, 144, 0.16));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .home-hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.14), transparent 30%),
-        radial-gradient(circle at 80% 10%, rgba(94, 234, 212, 0.16), transparent 30%),
-        radial-gradient(circle at 60% 80%, rgba(59, 130, 246, 0.12), transparent 30%);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .hero-copy,
-    .hero-panel {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-copy {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .hero-eyebrow {
-      align-self: flex-start;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-
-    .hero-title {
-      margin: 0;
-      font-size: clamp(1.8rem, 3vw, 2.2rem);
-    }
-
-    .hero-lead {
-      margin: 0;
-      color: var(--muted);
-      max-width: 62ch;
-    }
-
-    .hero-points {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .hero-highlight {
-      display: flex;
-      gap: 0.75rem;
-      padding: 0.9rem 1rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(8px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    }
-
-    .hero-highlight strong {
-      display: inline-block;
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: rgba(56, 189, 248, 0.18);
-      color: var(--accent);
-      display: grid;
-      place-items: center;
-      font-size: 1rem;
-    }
-
-    .hero-highlight span {
-      color: var(--muted);
-    }
-
-    .hero-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1.25rem;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-    }
-
-    .panel-heading {
-      display: flex;
-      justify-content: space-between;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .panel-heading p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .stats-grid {
-      display: grid;
-      gap: 0.75rem;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    }
-
-    .stat-card {
-      padding: 0.85rem 1rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .stat-card span {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .stat-card strong {
-      font-size: 1.4rem;
-    }
-
+    /* Add specific styles for the dashboard layout here */
     .controls-row {
       display: flex;
-      flex-direction: column;
       gap: 1rem;
-      margin-bottom: 1.5rem;
-      padding: 1.25rem;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.03);
-      box-shadow: var(--shadow);
-    }
-
-    .search-group {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 0.9rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(0, 0, 0, 0.35);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    }
-
-    .search-icon {
-      color: var(--muted);
-      font-size: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
 
     .search-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-size: 1rem;
+      flex: 1;
+      padding: 0.5rem;
+      min-width: 200px;
     }
 
-    .search-input:focus {
-      outline: none;
+    .skeleton {
+      background-color: #eee;
+      color: transparent;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
     }
 
-    .filter-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--muted);
-      font-size: 0.95rem;
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
     }
 
-    .filter-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .pill-filter {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.03);
-      color: inherit;
-      cursor: pointer;
-      transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
-    }
-
-    .pill-filter:hover {
-      transform: translateY(-1px);
-      border-color: rgba(56, 189, 248, 0.35);
-    }
-
-    .pill-filter.active {
-      background: rgba(56, 189, 248, 0.14);
-      border-color: rgba(56, 189, 248, 0.45);
-      color: var(--text);
-    }
-
-    .status-line {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .card-grid {
+    /* Ensure the grid adapts to mobile screens */
+    .grid {
       display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      width: 100%;
     }
 
+    /* Push footer to bottom of card */
     .card {
       display: flex;
       flex-direction: column;
       height: 100%;
-    }
-
-    .app-card {
-      gap: 1rem;
-      border: 1px solid var(--border);
-      background: linear-gradient(155deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.35));
-      box-shadow: var(--shadow);
-    }
-
-    .card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .card-body h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
-    .card-summary {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .card-footer {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .small-text {
-      font-size: 0.9rem;
-    }
-
-    .meta-line {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .card-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-    }
-
-    .subtle-button {
-      justify-content: space-between;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(56, 189, 248, 0.35);
-    }
-
-    .icon-arrow {
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
-
-    .skeleton {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-      background-size: 200% 100%;
-      animation: shimmer 1.6s ease-in-out infinite;
-      border-radius: 12px;
-      min-height: 220px;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% 0;
-      }
-      100% {
-        background-position: -200% 0;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .home-hero {
-        grid-template-columns: 1fr;
-      }
-
-      .panel-heading {
-        flex-direction: column;
-        align-items: flex-start;
-      }
     }
   </style>
 </head>
@@ -353,114 +62,23 @@
       appTagline: 'Tiny utilities with a shared shell',
     });
 
-    // 2. Hero area
-    const hero = document.createElement('section');
-    hero.className = 'home-hero';
-
-    const heroCopy = document.createElement('div');
-    heroCopy.className = 'hero-copy';
-
-    const eyebrow = document.createElement('span');
-    eyebrow.className = 'hero-eyebrow';
-    eyebrow.textContent = 'Micro app suite';
-
-    const heroTitle = document.createElement('h2');
-    heroTitle.className = 'hero-title';
-    heroTitle.textContent = 'Helpful little tools, ready in a single tap.';
-
-    const heroLead = document.createElement('p');
-    heroLead.className = 'hero-lead';
-    heroLead.textContent = 'A curated collection of lightweight utilities that load instantly, work offline, and share a cohesive shell.';
-
-    const heroPoints = document.createElement('div');
-    heroPoints.className = 'hero-points';
-    [
-      ['✨', 'Polished UI with consistent navigation.'],
-      ['📦', 'Zero-build static hosting friendly.'],
-      ['🧭', 'Accessible, keyboard-first defaults.'],
-    ].forEach(([icon, copy]) => {
-      const highlight = document.createElement('div');
-      highlight.className = 'hero-highlight';
-      const glyph = document.createElement('strong');
-      glyph.textContent = icon;
-      const text = document.createElement('span');
-      text.textContent = copy;
-      highlight.append(glyph, text);
-      heroPoints.appendChild(highlight);
-    });
-
-    heroCopy.append(eyebrow, heroTitle, heroLead, heroPoints);
-
-    const heroPanel = document.createElement('div');
-    heroPanel.className = 'hero-panel';
-
-    const panelHeading = document.createElement('div');
-    panelHeading.className = 'panel-heading';
-    const panelCopy = document.createElement('p');
-    panelCopy.textContent = 'Quickly discover tools and launch them without leaving the shell.';
-    const liveBadge = document.createElement('span');
-    liveBadge.className = 'hero-eyebrow';
-    liveBadge.textContent = 'Live preview';
-    panelHeading.append(panelCopy, liveBadge);
-
-    const statsGrid = document.createElement('div');
-    statsGrid.className = 'stats-grid';
-
-    function createStat(label) {
-      const card = document.createElement('div');
-      card.className = 'stat-card';
-      const value = document.createElement('strong');
-      value.textContent = '—';
-      const caption = document.createElement('span');
-      caption.textContent = label;
-      card.append(value, caption);
-      return { card, value };
-    }
-
-    const totalStat = createStat('Total apps');
-    const offlineStat = createStat('Offline ready');
-    const updateStat = createStat('Last updated');
-    statsGrid.append(totalStat.card, offlineStat.card, updateStat.card);
-
-    heroPanel.append(panelHeading, statsGrid);
-    hero.append(heroCopy, heroPanel);
-    content.appendChild(hero);
-
-    // 3. Controls (Search & Filters)
+    // 2. Create Controls (Search & Filter)
     const controlsContainer = document.createElement('div');
     controlsContainer.className = 'controls-row';
 
-    const searchGroup = document.createElement('label');
-    searchGroup.className = 'search-group';
-    searchGroup.setAttribute('aria-label', 'Search applications');
-
-    const searchIcon = document.createElement('span');
-    searchIcon.className = 'search-icon';
-    searchIcon.textContent = '🔍';
-
     const searchInput = document.createElement('input');
     searchInput.type = 'search';
-    searchInput.placeholder = 'Search apps by name or feature';
+    searchInput.placeholder = 'Search apps...';
     searchInput.className = 'search-input';
-    searchInput.setAttribute('aria-label', 'Search applications');
+    searchInput.ariaLabel = 'Search applications';
 
-    searchGroup.append(searchIcon, searchInput);
-
-    const filterHeader = document.createElement('div');
-    filterHeader.className = 'filter-header';
-    const filterTitle = document.createElement('span');
-    filterTitle.textContent = 'Filter by tag';
     const status = document.createElement('span');
-    status.className = 'status-line';
-    status.setAttribute('role', 'status');
-    filterHeader.append(filterTitle, status);
+    status.className = 'muted';
+    status.setAttribute('role', 'status'); // Better for screen readers than simple text
 
-    const filterPills = document.createElement('div');
-    filterPills.className = 'filter-pills';
+    controlsContainer.append(searchInput, status);
 
-    controlsContainer.append(searchGroup, filterHeader, filterPills);
-
-    // 4. Create Grid
+    // 3. Create Grid
     const grid = createGrid();
     grid.setAttribute('aria-live', 'polite');
 
@@ -468,63 +86,20 @@
 
     // Store apps globally for filtering
     let allApps = [];
-    let activeTag = 'all';
 
-    // 5. Skeleton Loading Logic
+    // 4. Skeleton Loading Logic
     function renderSkeletons(count = 4) {
       grid.replaceChildren();
-      status.textContent = 'Loading apps...';
+      status.textContent = 'Loading...';
       for (let i = 0; i < count; i++) {
         const skeletonCard = document.createElement('div');
         skeletonCard.className = 'card skeleton';
+        skeletonCard.style.height = '200px';
         grid.appendChild(skeletonCard);
       }
     }
 
-    function updateStats(apps) {
-      totalStat.value.textContent = apps.length;
-      const offlineCount = apps.filter((app) => app.offlineCapable).length;
-      offlineStat.value.textContent = `${offlineCount} ready`;
-
-      const latest = apps.reduce((acc, app) => {
-        const date = new Date(app.lastUpdated);
-        return acc && acc > date ? acc : date;
-      }, undefined);
-
-      updateStat.value.textContent = latest ? formatDate(latest.toISOString()) : '—';
-    }
-
-    function formatTagLabel(tag) {
-      if (tag === 'all') return 'All apps';
-      if (tag === 'offline-ready') return 'Offline ready';
-      return tag.charAt(0).toUpperCase() + tag.slice(1);
-    }
-
-    function renderTagFilters() {
-      const tagSet = new Set();
-      allApps.forEach((app) => {
-        (app.tags || []).forEach((tag) => tagSet.add(tag.toLowerCase()));
-        if (app.offlineCapable) tagSet.add('offline-ready');
-      });
-
-      const tags = ['all', ...Array.from(tagSet).sort()];
-      filterPills.replaceChildren();
-
-      tags.forEach((tag) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = `pill-filter ${tag === activeTag ? 'active' : ''}`.trim();
-        button.textContent = formatTagLabel(tag);
-        button.addEventListener('click', () => {
-          activeTag = tag;
-          renderTagFilters();
-          filterAndRender();
-        });
-        filterPills.appendChild(button);
-      });
-    }
-
-    // 6. Main Logic
+    // 5. Main Logic
     async function loadApps() {
       renderSkeletons();
 
@@ -533,8 +108,7 @@
         if (!response.ok) throw new Error('Could not load apps manifest');
 
         allApps = await response.json();
-        updateStats(allApps);
-        renderTagFilters();
+
         filterAndRender();
       } catch (error) {
         grid.replaceChildren();
@@ -544,25 +118,19 @@
       }
     }
 
-    // 7. Filtering & Rendering Logic
+    // 6. Filtering & Rendering Logic
     function filterAndRender() {
-      const query = searchInput.value.toLowerCase().trim();
+      const query = searchInput.value.toLowerCase();
 
       const filtered = allApps.filter((app) => {
         const matchesText =
           app.title.toLowerCase().includes(query) ||
           app.description.toLowerCase().includes(query);
-        const normalizedTags = (app.tags || []).map((tag) => tag.toLowerCase());
-        const matchesTag =
-          activeTag === 'all' ||
-          (activeTag === 'offline-ready' && app.offlineCapable) ||
-          normalizedTags.includes(activeTag);
-        return matchesText && matchesTag;
+        return matchesText;
       });
 
       renderApps(filtered);
-      const tagText = activeTag === 'all' ? '' : ` · filtered by ${formatTagLabel(activeTag).toLowerCase()}`;
-      status.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} found${tagText}`;
+      status.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} found`;
     }
 
     function renderApps(apps) {
@@ -583,47 +151,40 @@
           href: app.entryPath,
         });
 
-        const cardBody = card.querySelector('.card-body');
-        const metaLine = document.createElement('div');
-        metaLine.className = 'meta-line small-text';
-        const updated = document.createElement('span');
-        updated.textContent = `Updated ${formatDate(app.lastUpdated)}`;
-        const version = document.createElement('span');
-        version.textContent = `v${app.version}`;
-        metaLine.append(updated, version);
-        cardBody.prepend(metaLine);
-
         const footer = document.createElement('div');
-        footer.className = 'card-footer';
+        footer.style.marginTop = 'auto';
 
         const tagsRow = document.createElement('div');
         tagsRow.className = 'pill-row';
 
         if (app.offlineCapable) {
-          const wifiPill = createPill('Offline ready');
+          const wifiPill = createPill('Offline Ready');
           tagsRow.appendChild(wifiPill);
         }
 
         (app.tags || []).forEach((tag) => tagsRow.appendChild(createPill(tag)));
 
         const meta = document.createElement('div');
-        meta.className = 'meta-line small-text';
-        const focus = document.createElement('span');
-        focus.textContent = app.offlineCapable ? 'Works offline' : 'Online-first';
-        const categories = document.createElement('span');
-        categories.textContent = (app.tags || []).length ? app.tags.join(' • ') : 'General utility';
+        meta.className = 'muted small-text';
+        meta.style.display = 'flex';
+        meta.style.justifyContent = 'space-between';
+        meta.style.marginTop = '1rem';
 
-        meta.append(focus, categories);
+        const ver = document.createElement('span');
+        ver.textContent = `v${app.version}`;
+
+        const date = document.createElement('span');
+        date.textContent = formatDate(app.lastUpdated);
+
+        meta.append(ver, date);
         footer.append(tagsRow, meta);
-
-        const actions = card.querySelector('.card-actions');
-        card.insertBefore(footer, actions);
+        card.appendChild(footer);
 
         grid.appendChild(card);
       });
     }
 
-    // 8. Event Listeners
+    // 7. Event Listeners
     searchInput.addEventListener('input', filterAndRender);
 
     loadApps();
