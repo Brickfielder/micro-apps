@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emotion Chat — Social Cognition Micro-App</title>
+
+  <link rel="stylesheet" href="../shared/shell/shell.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main id="app-root">
+    <div id="stage-intro" class="stage active">
+      <div class="screen-content">
+        <h1>Emotion Chat</h1>
+        <p>Observe a conversation between two people. Identify their emotions based on context and dialogue.</p>
+
+        <div class="config-group">
+          <div class="ctrl">
+            <label for="scenario">Select Scenario</label>
+            <select id="scenario"></select>
+          </div>
+          <div class="ctrl">
+            <label for="distractors">Difficulty (distractors per person)</label>
+            <select id="distractors">
+              <option>6</option><option selected>8</option><option>10</option><option>12</option><option>14</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn primary full" id="startBtn">Start Session</button>
+      </div>
+    </div>
+
+    <div id="stage-task" class="stage">
+      <div class="toolbar-row">
+        <span class="small" id="status" aria-live="polite">Playing...</span>
+        <span class="small" id="timerText">0s</span>
+      </div>
+
+      <div class="app-grid">
+        <section class="card" aria-labelledby="chatTitle">
+          <h2 id="chatTitle">Chat</h2>
+          <div id="chat" class="chat" aria-label="Chat transcript" aria-live="polite"></div>
+          <div class="progress-text">
+             <span id="progress">0 / 0</span>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="respTitle">
+          <h2 id="respTitle">Your Analysis</h2>
+
+          <div class="step-box" id="step1">
+            <h3>Step 1 — Free choice</h3>
+            <p class="small" id="step1Hint">Wait for the chat to finish...</p>
+            
+            <div class="row">
+              <div>
+                <label class="legend" for="freeA" id="labelA">Person A</label>
+                <textarea id="freeA" placeholder="Type emotions..."></textarea>
+              </div>
+              <div>
+                <label class="legend" for="freeB" id="labelB">Person B</label>
+                <textarea id="freeB" placeholder="Type emotions..."></textarea>
+              </div>
+            </div>
+            
+            <div class="actions">
+              <button class="btn primary" id="proceed" disabled>Continue</button>
+            </div>
+          </div>
+
+          <div class="step-box" id="step2" hidden>
+            <h3>Step 2 — Select from list</h3>
+            
+            <div class="legend" id="pillTitleA">Person A</div>
+            <div class="pillgrid" id="pillsA"></div>
+            
+            <div class="divider"></div>
+
+            <div class="legend" id="pillTitleB">Person B</div>
+            <div class="pillgrid" id="pillsB"></div>
+
+            <div class="actions">
+              <button class="btn primary" id="submit" disabled>Finish &amp; Review</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="stage-debrief" class="stage">
+      <div class="screen-content wide">
+        <h1>Results</h1>
+        
+        <div class="tags" id="kpi"></div>
+        <div class="divider"></div>
+
+        <div class="feedback-grid">
+          <div class="feedback-col" id="fbA"></div>
+          <div class="feedback-col" id="fbB"></div>
+        </div>
+
+        <details>
+            <summary><strong>Review Transcript</strong></summary>
+            <div id="transcript-review" class="transcript-review"></div>
+        </details>
+
+        <div class="debrief-actions">
+            <button class="btn" id="restartBtn">New Scenario</button>
+            <button class="btn primary" id="download" disabled>Download CSV</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>
