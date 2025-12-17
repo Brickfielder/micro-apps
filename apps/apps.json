@@ -28,5 +28,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2024-08-01"
+  },
+  {
+    "slug": "emotion-chat",
+    "title": "Emotion Chat",
+    "description": "Observe a conversation between two people and label their emotions.",
+    "tags": ["social", "cognition"],
+    "entryPath": "./apps/emotion-chat/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2024-09-01"
   }
 ]
