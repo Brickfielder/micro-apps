@@ -13,15 +13,18 @@
   <main id="app-root">
     <section id="stage-intro" class="stage active" aria-labelledby="intro-heading">
       <div class="screen-content">
-        <h1 id="intro-heading">📖 Left-Anchor Reader</h1>
-        <p>
+        <div class="instruction-icon" aria-hidden="true">📖</div>
+        <h1 id="intro-heading">Left-Anchor Reader</h1>
+        <p class="instruction-desc">
           This reading exercise is designed to help with Visuo-Spatial Neglect. You will read a short story across several pages.
         </p>
-        <div class="instructions-box">
-          <strong>Instructions:</strong><br />
-          1. Use the toolbar to select a visual cue if needed (Red Stripe, Sweeping Light, or Highlighted Words).<br />
-          2. Read carefully from left to right.<br />
-          3. Swipe or click "Next" to turn the page.
+        <div class="task-panel" aria-label="Instructions">
+          <strong>Instructions</strong>
+          <ul>
+            <li>Use the toolbar to select a visual cue if needed (Red Stripe, Sweeping Light, or Highlighted Words).</li>
+            <li>Read carefully from left to right, keeping an eye on the left margin.</li>
+            <li>Swipe or click "Next" to turn the page.</li>
+          </ul>
         </div>
         <button class="btn primary full-width" id="startBtn">Start Reading</button>
       </div>
