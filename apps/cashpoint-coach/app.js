@@ -23,6 +23,7 @@
     actions: {},
     mode: 'standard',
     pinChange: null,
+    lastResult: null,
   };
 
   const elements = {
@@ -40,6 +41,7 @@
       start: document.getElementById('startBtn'),
       abort: document.getElementById('abortBtn'),
       restart: document.getElementById('restartBtn'),
+      download: document.getElementById('downloadBtn'),
     },
     screenTitle: document.getElementById('screenTitle'),
     screenText: document.getElementById('screenText'),
@@ -109,6 +111,7 @@
     elements.buttons.start.addEventListener('click', startSession);
     elements.buttons.abort.addEventListener('click', () => endSession(false, 'Aborted'));
     elements.buttons.restart.addEventListener('click', () => switchStage('intro'));
+    elements.buttons.download.addEventListener('click', downloadStats);
   }
 
   function switchStage(name) {
@@ -134,6 +137,7 @@
     state.pinChange = null;
 
     resetSlots();
+    disableDownload();
     elements.slots.card.classList.add('active', 'ejected');
     updateScreen('WELCOME', 'Please insert your card');
 
@@ -149,11 +153,27 @@
   }
 
   function endSession(success, message) {
-    const elapsedSeconds = ((Date.now() - state.startTime) / 1000).toFixed(1);
+    const elapsedSeconds = Number(((Date.now() - state.startTime) / 1000).toFixed(1));
+    const resultMessage = message || (success ? 'Transaction Complete' : 'Transaction Failed');
+    const timestamp = new Date();
+
     elements.results.icon.textContent = success ? '✅' : '❌';
-    elements.results.message.textContent = message || (success ? 'Transaction Complete' : 'Transaction Failed');
+    elements.results.message.textContent = resultMessage;
     elements.results.time.textContent = `${elapsedSeconds}s`;
     elements.results.pin.textContent = state.pinErrors;
+
+    state.lastResult = {
+      scenario: state.scenario?.title || 'N/A',
+      mode: state.mode,
+      card: state.card?.name || 'N/A',
+      success,
+      message: resultMessage,
+      timeSeconds: elapsedSeconds,
+      pinErrors: state.pinErrors,
+      timestamp: timestamp.toISOString(),
+    };
+
+    elements.buttons.download.disabled = false;
     switchStage('debrief');
   }
 
@@ -302,13 +322,13 @@
   }
 
   function startWithdraw(defaultAmount) {
+    const labelFor = (amount) => `£${amount}`;
+
     const options = {
-      R1: {
-        label: defaultAmount ? `£${defaultAmount} (Scenario)` : '£10',
-        action: () => dispenseCash(defaultAmount || 10),
-      },
-      R2: { label: '£20', action: () => dispenseCash(20) },
-      R3: { label: '£50', action: () => dispenseCash(50) },
+      R1: { label: labelFor(50), action: () => dispenseCash(50) },
+      R2: { label: labelFor(20), action: () => dispenseCash(20) },
+      R3: { label: labelFor(10), action: () => dispenseCash(10) },
+      R4: { label: labelFor(5), action: () => dispenseCash(5) },
       L4: { label: 'Cancel', action: showMainMenu },
     };
 
@@ -395,6 +415,46 @@
       state.pinBuffer += key;
       elements.screenText.innerHTML = 'Enter PIN:<br>' + '*'.repeat(state.pinBuffer.length);
     }
+  }
+
+  function disableDownload() {
+    state.lastResult = null;
+    elements.buttons.download.disabled = true;
+  }
+
+  function downloadStats() {
+    if (!state.lastResult) return;
+
+    const headers = ['Scenario', 'Mode', 'Card', 'Result', 'Message', 'TimeSeconds', 'PinErrors', 'Timestamp'];
+    const values = [
+      state.lastResult.scenario,
+      state.lastResult.mode,
+      state.lastResult.card,
+      state.lastResult.success ? 'Success' : 'Failure',
+      state.lastResult.message,
+      state.lastResult.timeSeconds,
+      state.lastResult.pinErrors,
+      state.lastResult.timestamp,
+    ];
+
+    const csv = `${headers.join(',')}\n${values
+      .map((value) => {
+        if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+          return `"${value.replace(/"/g, '""')}"`;
+        }
+        return value;
+      })
+      .join(',')}`;
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cashpoint-session-${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   }
 
   function dispenseCash(amount) {

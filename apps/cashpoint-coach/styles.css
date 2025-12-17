@@ -609,6 +609,14 @@ body {
   border-radius: 10px;
 }
 
+.debrief-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
 @media (max-width: 900px) {
   .atm-body {
     grid-template-columns: 1fr;
