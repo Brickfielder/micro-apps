@@ -302,13 +302,13 @@
   }
 
   function startWithdraw(defaultAmount) {
+    const labelFor = (amount) => (defaultAmount === amount ? `£${amount} (Scenario)` : `£${amount}`);
+
     const options = {
-      R1: {
-        label: defaultAmount ? `£${defaultAmount} (Scenario)` : '£10',
-        action: () => dispenseCash(defaultAmount || 10),
-      },
-      R2: { label: '£20', action: () => dispenseCash(20) },
-      R3: { label: '£50', action: () => dispenseCash(50) },
+      R1: { label: labelFor(50), action: () => dispenseCash(50) },
+      R2: { label: labelFor(20), action: () => dispenseCash(20) },
+      R3: { label: labelFor(10), action: () => dispenseCash(10) },
+      R4: { label: labelFor(5), action: () => dispenseCash(5) },
       L4: { label: 'Cancel', action: showMainMenu },
     };
 
