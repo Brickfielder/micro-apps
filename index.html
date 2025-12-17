@@ -5,6 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Micro Apps | Home</title>
   <link rel="stylesheet" href="./shared/shell/shell.css" />
+  <style>
+    /* Add specific styles for the dashboard layout here */
+    .controls-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 0.5rem;
+      min-width: 200px;
+    }
+
+    .skeleton {
+      background-color: #eee;
+      color: transparent;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    /* Ensure the grid adapts to mobile screens */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    /* Push footer to bottom of card */
+    .card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  </style>
 </head>
 <body>
   <div id="app-root"></div>
@@ -13,36 +56,94 @@
     import { createCard, createPill, createGrid } from './shared/ui/components.js';
     import { formatDate } from './shared/utils/format.js';
 
+    // 1. Setup the Shell
     const { content } = mountShell({
       appTitle: 'Micro Apps',
       appTagline: 'Tiny utilities with a shared shell',
     });
 
+    // 2. Create Controls (Search & Filter)
+    const controlsContainer = document.createElement('div');
+    controlsContainer.className = 'controls-row';
+
+    const searchInput = document.createElement('input');
+    searchInput.type = 'search';
+    searchInput.placeholder = 'Search apps...';
+    searchInput.className = 'search-input';
+    searchInput.ariaLabel = 'Search applications';
+
+    const status = document.createElement('span');
+    status.className = 'muted';
+    status.setAttribute('role', 'status'); // Better for screen readers than simple text
+
+    controlsContainer.append(searchInput, status);
+
+    // 3. Create Grid
     const grid = createGrid();
     grid.setAttribute('aria-live', 'polite');
 
-    const status = document.createElement('p');
-    status.className = 'muted';
-    status.textContent = 'Loading apps…';
+    content.append(controlsContainer, grid);
 
-    content.append(status, grid);
+    // Store apps globally for filtering
+    let allApps = [];
 
+    // 4. Skeleton Loading Logic
+    function renderSkeletons(count = 4) {
+      grid.replaceChildren();
+      status.textContent = 'Loading...';
+      for (let i = 0; i < count; i++) {
+        const skeletonCard = document.createElement('div');
+        skeletonCard.className = 'card skeleton';
+        skeletonCard.style.height = '200px';
+        grid.appendChild(skeletonCard);
+      }
+    }
+
+    // 5. Main Logic
     async function loadApps() {
+      renderSkeletons();
+
       try {
         const response = await fetch('./apps/apps.json');
         if (!response.ok) throw new Error('Could not load apps manifest');
-        const apps = await response.json();
-        renderApps(apps);
-        status.textContent = `${apps.length} app${apps.length === 1 ? '' : 's'} ready`;
+
+        allApps = await response.json();
+
+        filterAndRender();
       } catch (error) {
-        status.textContent = 'Failed to load apps. Please retry when online.';
+        grid.replaceChildren();
+        status.textContent = 'Failed to load apps.';
         status.setAttribute('role', 'alert');
         console.error(error);
       }
     }
 
+    // 6. Filtering & Rendering Logic
+    function filterAndRender() {
+      const query = searchInput.value.toLowerCase();
+
+      const filtered = allApps.filter((app) => {
+        const matchesText =
+          app.title.toLowerCase().includes(query) ||
+          app.description.toLowerCase().includes(query);
+        return matchesText;
+      });
+
+      renderApps(filtered);
+      status.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} found`;
+    }
+
     function renderApps(apps) {
       grid.replaceChildren();
+
+      if (apps.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.textContent = 'No apps found matching your search.';
+        emptyState.className = 'muted';
+        grid.appendChild(emptyState);
+        return;
+      }
+
       apps.forEach((app) => {
         const card = createCard({
           title: app.title,
@@ -50,22 +151,42 @@
           href: app.entryPath,
         });
 
+        const footer = document.createElement('div');
+        footer.style.marginTop = 'auto';
+
         const tagsRow = document.createElement('div');
         tagsRow.className = 'pill-row';
 
+        if (app.offlineCapable) {
+          const wifiPill = createPill('Offline Ready');
+          tagsRow.appendChild(wifiPill);
+        }
+
         (app.tags || []).forEach((tag) => tagsRow.appendChild(createPill(tag)));
-        tagsRow.appendChild(createPill(app.offlineCapable ? 'Offline ready' : 'Online only'));
-        tagsRow.appendChild(createPill(`v${app.version}`));
 
-        const meta = document.createElement('p');
-        meta.className = 'muted';
-        meta.textContent = `Updated ${formatDate(app.lastUpdated)}`;
+        const meta = document.createElement('div');
+        meta.className = 'muted small-text';
+        meta.style.display = 'flex';
+        meta.style.justifyContent = 'space-between';
+        meta.style.marginTop = '1rem';
 
-        card.append(tagsRow, meta);
+        const ver = document.createElement('span');
+        ver.textContent = `v${app.version}`;
+
+        const date = document.createElement('span');
+        date.textContent = formatDate(app.lastUpdated);
+
+        meta.append(ver, date);
+        footer.append(tagsRow, meta);
+        card.appendChild(footer);
+
         grid.appendChild(card);
       });
     }
-    
+
+    // 7. Event Listeners
+    searchInput.addEventListener('input', filterAndRender);
+
     loadApps();
     registerServiceWorker();
   </script>
