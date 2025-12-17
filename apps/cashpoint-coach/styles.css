@@ -101,6 +101,12 @@ body {
   justify-content: center;
 }
 
+#stage-debrief {
+  padding: 32px 16px 56px;
+  display: flex;
+  justify-content: center;
+}
+
 .stage {
   display: none;
   animation: fadeIn 0.4s ease;
@@ -136,6 +142,94 @@ body {
 .panel-header p {
   margin: 0 0 1.25rem;
   color: var(--muted);
+}
+
+.summary-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  color: #1f2937;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  width: min(800px, 100%);
+}
+
+.summary-card h1 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(26px, 3vw, 32px);
+}
+
+.summary-card p {
+  color: #4b5563;
+  margin-bottom: 1.75rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.stat-val {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ef3b2a;
+}
+
+.stat-lbl {
+  font-size: 0.85rem;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.comment-block {
+  text-align: left;
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
+}
+
+.comment-label {
+  font-weight: 700;
+  color: #111827;
+}
+
+.comment-area {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font: inherit;
+  color: #111827;
+  resize: vertical;
+}
+
+.comment-area:focus {
+  outline: 3px solid rgba(239, 59, 42, 0.25);
+  outline-offset: 2px;
+  border-color: #ef3b2a;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
 .instructions-box {

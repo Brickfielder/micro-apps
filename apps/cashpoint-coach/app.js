@@ -56,10 +56,12 @@
       receipt: document.getElementById('gfx-receipt'),
     },
     results: {
-      icon: document.getElementById('res-icon'),
       message: document.getElementById('res-msg'),
       time: document.getElementById('res-time'),
+      mode: document.getElementById('res-mode'),
+      scenario: document.getElementById('res-scenario'),
       pin: document.getElementById('res-pin'),
+      comment: document.getElementById('clinicianComment'),
     },
     keyContainer: document.getElementById('keys'),
   };
@@ -138,6 +140,9 @@
 
     resetSlots();
     disableDownload();
+    if (elements.results.comment) {
+      elements.results.comment.value = '';
+    }
     elements.slots.card.classList.add('active', 'ejected');
     updateScreen('WELCOME', 'Please insert your card');
 
@@ -153,13 +158,15 @@
   }
 
   function endSession(success, message) {
-    const elapsedSeconds = Number(((Date.now() - state.startTime) / 1000).toFixed(1));
+    const elapsedSeconds = Math.max(0, Math.round((Date.now() - state.startTime) / 1000));
+    const formattedTime = formatTime(elapsedSeconds);
     const resultMessage = message || (success ? 'Transaction Complete' : 'Transaction Failed');
     const timestamp = new Date();
 
-    elements.results.icon.textContent = success ? '✅' : '❌';
     elements.results.message.textContent = resultMessage;
-    elements.results.time.textContent = `${elapsedSeconds}s`;
+    elements.results.time.textContent = formattedTime;
+    elements.results.mode.textContent = state.mode === 'guided' ? 'Guided' : 'Standard';
+    elements.results.scenario.textContent = state.scenario?.title || 'N/A';
     elements.results.pin.textContent = state.pinErrors;
 
     state.lastResult = {
@@ -171,6 +178,7 @@
       timeSeconds: elapsedSeconds,
       pinErrors: state.pinErrors,
       timestamp: timestamp.toISOString(),
+      comment: elements.results.comment?.value?.trim() || '',
     };
 
     elements.buttons.download.disabled = false;
@@ -425,7 +433,9 @@
   function downloadStats() {
     if (!state.lastResult) return;
 
-    const headers = ['Scenario', 'Mode', 'Card', 'Result', 'Message', 'TimeSeconds', 'PinErrors', 'Timestamp'];
+    state.lastResult.comment = elements.results.comment?.value?.trim() || '';
+
+    const headers = ['Scenario', 'Mode', 'Card', 'Result', 'Message', 'TimeSeconds', 'PinErrors', 'Timestamp', 'Comment'];
     const values = [
       state.lastResult.scenario,
       state.lastResult.mode,
@@ -435,6 +445,7 @@
       state.lastResult.timeSeconds,
       state.lastResult.pinErrors,
       state.lastResult.timestamp,
+      state.lastResult.comment,
     ];
 
     const csv = `${headers.join(',')}\n${values
@@ -491,6 +502,12 @@
     elements.slots.cash.classList.remove('active');
     elements.slots.receipt.classList.remove('active');
     elements.slots.card.className = 'slot-unit slot-card ejected';
+  }
+
+  function formatTime(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   function speak(text) {

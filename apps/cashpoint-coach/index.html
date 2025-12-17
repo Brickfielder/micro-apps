@@ -149,23 +149,43 @@
     </section>
 
     <section id="stage-debrief" class="stage" aria-labelledby="debrief-heading">
-      <div class="panel">
-        <div class="panel-header">
-          <h2 id="debrief-heading">Session Finished</h2>
-          <p>Review how the scenario went and start another session when ready.</p>
+      <div class="summary-card">
+        <h1 id="debrief-heading">Session Complete</h1>
+        <p id="res-msg">Great job completing the ATM scenario.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-val" id="res-time">0:00</span>
+            <span class="stat-lbl">Time Taken</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-val" id="res-mode">Standard</span>
+            <span class="stat-lbl">Mode Used</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-val" id="res-scenario">Withdraw £20</span>
+            <span class="stat-lbl">Scenario</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-val" id="res-pin">0</span>
+            <span class="stat-lbl">PIN Errors</span>
+          </div>
         </div>
 
-        <div class="result-icon" id="res-icon" aria-hidden="true">✅</div>
-        <p id="res-msg" class="result-message">Transaction completed successfully.</p>
-
-        <div class="config-grid stats">
-          <div>Time Taken: <strong id="res-time"></strong></div>
-          <div>PIN Errors: <strong id="res-pin"></strong></div>
+        <div class="comment-block">
+          <label class="comment-label" for="clinicianComment">Clinician comment</label>
+          <textarea
+            id="clinicianComment"
+            name="clinicianComment"
+            class="comment-area"
+            placeholder="Add any observations or follow-up notes here..."
+            rows="3"
+          ></textarea>
         </div>
 
-        <div class="debrief-actions">
-          <button id="downloadBtn" class="btn secondary" disabled>Download Stats (CSV)</button>
-          <button id="restartBtn" class="btn primary">New Session</button>
+        <div class="footer-actions">
+          <button class="btn" id="restartBtn">Restart</button>
+          <button class="btn primary" id="downloadBtn" disabled>Export Result</button>
         </div>
       </div>
     </section>
