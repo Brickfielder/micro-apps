@@ -1,17 +1,24 @@
 import { createEl } from '../utils/dom.js';
 
 export function createCard({ title, description, href }) {
-  const card = createEl('article', { className: 'card' });
+  const card = createEl('article', { className: 'card app-card' });
+
+  const body = createEl('div', { className: 'card-body' });
   const heading = createEl('h2', { text: title });
-  const summary = createEl('p', { text: description });
+  const summary = createEl('p', { className: 'card-summary', text: description });
+  body.append(heading, summary);
 
+  const actions = createEl('div', { className: 'card-actions' });
   const link = createEl('a', {
-    className: 'button',
+    className: 'button subtle-button',
     attrs: { href, 'aria-label': `${title} app` },
-    text: 'Open',
+    text: 'Open app',
   });
+  const arrow = createEl('span', { className: 'icon-arrow', text: '↗' });
+  link.appendChild(arrow);
 
-  card.append(heading, summary, link);
+  actions.append(link);
+  card.append(body, actions);
   return card;
 }
 
