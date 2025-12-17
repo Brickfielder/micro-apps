@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Composer Coach - Outlook Style</title>
+
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="../shared/frame.js"></script>
+  <script defer src="../shared/clinician_feedback.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main id="app-root">
+    <div id="stage-intro" class="app-stage active">
+      <div class="card intro-container text-center">
+        <div class="intro-icon">📧</div>
+        <h1>Email Practice</h1>
+        <p>You are about to write a professional email in a simulated Outlook environment.</p>
+        <div class="task-box">
+          <strong>Task:</strong><br>
+          1. Compose an email to a colleague or organisation.<br>
+          2. Use the <strong>"Check Draft"</strong> button to get feedback on tone, structure, and spelling.<br>
+          3. When satisfied, click <strong>"Send"</strong> to finish.
+        </div>
+        <button id="startBtn" class="btn btn-primary start-btn">Start Composition</button>
+      </div>
+    </div>
+
+    <div id="stage-workspace" class="app-stage">
+      <div class="grid two-col">
+        <section class="card outlook-window">
+          <div class="ribbon">
+            <button class="send-btn-group" id="finishTaskBtn">
+              <span>Send</span>
+              <span class="send-btn-divider">Example</span>
+            </button>
+            <div class="vertical-divider" aria-hidden="true"></div>
+            <button class="ribbon-btn" title="Attach">
+              <span>📎</span>
+              <span>Attach</span>
+            </button>
+            <button class="ribbon-btn" id="checkButtonRibbon">
+              <span>abc✓</span>
+              <span>Spelling</span>
+            </button>
+            <div class="flex-spacer" aria-hidden="true"></div>
+            <button class="ribbon-btn" id="clearButton">
+              <span>🗑️</span>
+              <span>Discard</span>
+            </button>
+          </div>
+
+          <div class="email-headers">
+            <div class="header-row">
+              <label for="fromInput">From</label>
+              <input type="text" id="fromInput" value="you@outlook-sim.com" readonly />
+            </div>
+            <div class="header-row">
+              <label for="toInput">To</label>
+              <input type="text" id="toInput" placeholder="Recipient" />
+            </div>
+            <div class="header-row">
+              <label for="ccInput">Cc</label>
+              <input type="text" id="ccInput" placeholder="" />
+            </div>
+            <div class="header-row no-border">
+              <label for="subjectInput">Subject</label>
+              <input type="text" id="subjectInput" placeholder="Add a subject" />
+            </div>
+          </div>
+
+          <div class="separator-line"></div>
+
+          <div class="editor-container">
+            <textarea id="bodyInput" class="email-body" placeholder="Type your message here..." spellcheck="true"></textarea>
+          </div>
+
+          <div class="actions-bar">
+            <div id="statusSummary">Draft in progress</div>
+            <button id="checkButton" class="btn btn-secondary">
+              <span class="check-icon">✓</span> Check Draft
+            </button>
+          </div>
+        </section>
+
+        <aside class="card coach-panel">
+          <h2>Coach Insights</h2>
+          <p class="coach-description">Click <strong>Check Draft</strong> to analyze spelling, tone, and clarity.</p>
+
+          <ul class="feedback-list" id="feedbackList"></ul>
+
+          <div class="checklist" id="checklistContainer">
+            <strong class="checklist-title">Essential Elements</strong>
+            <label><input type="checkbox" id="greetingCheck" disabled /> Greeting</label>
+            <label><input type="checkbox" id="purposeCheck" disabled /> Clear Purpose</label>
+            <label><input type="checkbox" id="detailsCheck" disabled /> Key Details</label>
+            <label><input type="checkbox" id="closingCheck" disabled /> Sign-off</label>
+          </div>
+
+          <div class="therapist-area">
+            <strong class="therapist-title">Guidance Prompts</strong>
+            <p class="therapist-hint">Therapist: Enter items the user must include (comma separated).</p>
+            <textarea id="guidanceInput" placeholder="e.g. Appointment time, Account number"></textarea>
+            <button id="applyGuidance" class="btn btn-secondary full-width-btn">Add to Checklist</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="stage-debrief" class="app-stage">
+      <div class="card intro-container">
+        <div class="intro-icon success">✓</div>
+        <h1 class="text-center">Email Sent</h1>
+        <p class="text-center">The email has been simulated as sent. Please review the session.</p>
+
+        <div class="notes-section">
+          <label class="therapist-title" for="therapistNotes">Therapist Observations</label>
+          <textarea id="therapistNotes"></textarea>
+        </div>
+
+        <div class="debrief-actions">
+          <button id="downloadCsvBtn" class="btn btn-primary">Download Report</button>
+          <button id="restartBtn" class="btn btn-secondary">New Session</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
