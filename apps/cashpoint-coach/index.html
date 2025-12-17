@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CashPoint Coach — Realistic ATM</title>
+  <meta name="description" content="Practice ATM interactions with guided or standard modes and multiple scenarios." />
+
+  <link rel="stylesheet" href="../shared/shell/shell.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main id="app-root" class="app-frame">
+    <header class="app-header">
+      <div class="app-brand">
+        <div class="app-logo">£</div>
+        <div>
+          <p class="eyebrow">Training Simulation</p>
+          <h1 class="title">CashPoint Coach</h1>
+          <p class="muted">A realistic ATM simulator with guided assistance and multiple practice scenarios.</p>
+        </div>
+      </div>
+    </header>
+
+    <section id="stage-intro" class="stage active" aria-labelledby="intro-heading">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 id="intro-heading">Welcome to the ATM simulator</h2>
+          <p>Choose a scenario, pick your preferred mode, and start practicing secure ATM interactions.</p>
+        </div>
+
+        <div class="instructions-box">
+          <strong>How it works</strong>
+          <ul>
+            <li>Use the side buttons beside the screen to select on-screen options.</li>
+            <li>Enter PINs and amounts with the keypad. Cancel or clear as needed.</li>
+            <li>Click the card, cash, or receipt slots to insert or collect items.</li>
+          </ul>
+        </div>
+
+        <div class="config-grid">
+          <label class="ctrl">
+            <span>Scenario</span>
+            <select id="scenario">
+              <option value="withdraw20">Withdraw £20</option>
+              <option value="balance">Check Balance</option>
+              <option value="topup">Mobile Top-up</option>
+              <option value="pin">Change PIN</option>
+            </select>
+          </label>
+          <label class="ctrl">
+            <span>Mode</span>
+            <select id="assist">
+              <option value="guided">Guided (Voice + Text)</option>
+              <option value="standard" selected>Standard</option>
+            </select>
+          </label>
+          <label class="ctrl">
+            <span>Card</span>
+            <select id="card">
+              <option value="A">Blue Card (PIN: 5241)</option>
+              <option value="B">Gold Card (PIN: 7309)</option>
+            </select>
+          </label>
+        </div>
+
+        <button id="startBtn" class="btn primary">Insert Card to Start</button>
+      </div>
+    </section>
+
+    <section id="stage-task" class="stage" aria-live="polite">
+      <div class="atm-wrapper">
+        <div class="atm-unit">
+          <div class="atm-sign">
+            <span class="sign-top">CASH</span>
+            <span class="sign-sub">MACHINE</span>
+          </div>
+
+          <div class="atm-body">
+            <div class="col-left">
+              <div class="screen-assembly">
+                <div class="fdk-col left">
+                  <button class="fdk-btn" id="L1" aria-label="Left option 1"></button>
+                  <button class="fdk-btn" id="L2" aria-label="Left option 2"></button>
+                  <button class="fdk-btn" id="L3" aria-label="Left option 3"></button>
+                  <button class="fdk-btn" id="L4" aria-label="Left option 4"></button>
+                </div>
+
+                <div class="crt-screen">
+                  <div class="screen-header" id="screenTitle">WELCOME</div>
+                  <div class="screen-main" id="screenText">System Ready</div>
+
+                  <div class="os-labels" aria-hidden="true">
+                    <div class="os-col left">
+                      <div class="os-label" id="lbl-L1"></div>
+                      <div class="os-label" id="lbl-L2"></div>
+                      <div class="os-label" id="lbl-L3"></div>
+                      <div class="os-label" id="lbl-L4"></div>
+                    </div>
+                    <div class="os-col right">
+                      <div class="os-label" id="lbl-R1"></div>
+                      <div class="os-label" id="lbl-R2"></div>
+                      <div class="os-label" id="lbl-R3"></div>
+                      <div class="os-label" id="lbl-R4"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fdk-col right">
+                  <button class="fdk-btn" id="R1" aria-label="Right option 1"></button>
+                  <button class="fdk-btn" id="R2" aria-label="Right option 2"></button>
+                  <button class="fdk-btn" id="R3" aria-label="Right option 3"></button>
+                  <button class="fdk-btn" id="R4" aria-label="Right option 4"></button>
+                </div>
+              </div>
+
+              <div class="keypad-shelf">
+                <div class="keys" id="keys" aria-label="Keypad"></div>
+              </div>
+            </div>
+
+            <div class="col-right">
+              <div class="slot-unit" id="slot-receipt">
+                <div class="slot-label">Receipt</div>
+                <div class="slot-face">
+                  <div class="receipt-graphic" id="gfx-receipt">RCPT</div>
+                  <div class="slot-aperture"></div>
+                </div>
+              </div>
+
+              <div class="slot-unit slot-card ejected active" id="slot-card">
+                <div class="slot-label">Card</div>
+                <div class="slot-face">
+                  <div class="card-graphic" aria-hidden="true"></div>
+                  <div class="slot-aperture"></div>
+                </div>
+              </div>
+
+              <div class="slot-unit" id="slot-cash">
+                <div class="slot-label">Cash</div>
+                <div class="slot-face">
+                  <div class="cash-graphic" id="gfx-cash"></div>
+                  <div class="slot-aperture"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="helper-badge" id="pinHint" aria-live="polite"></div>
+        </div>
+
+        <div class="controls">
+          <button id="abortBtn" class="btn secondary">Abort Transaction</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="stage-debrief" class="stage" aria-labelledby="debrief-heading">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 id="debrief-heading">Session Finished</h2>
+          <p>Review how the scenario went and start another session when ready.</p>
+        </div>
+
+        <div class="result-icon" id="res-icon" aria-hidden="true">✅</div>
+        <p id="res-msg" class="result-message">Transaction completed successfully.</p>
+
+        <div class="config-grid stats">
+          <div>Time Taken: <strong id="res-time"></strong></div>
+          <div>PIN Errors: <strong id="res-pin"></strong></div>
+        </div>
+
+        <button id="restartBtn" class="btn primary">New Session</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
