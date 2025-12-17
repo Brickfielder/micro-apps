@@ -8,5 +8,15 @@
     "version": "0.1.0",
     "offlineCapable": true,
     "lastUpdated": "2024-06-01"
+  },
+  {
+    "slug": "email-composer",
+    "title": "Email Composer Coach",
+    "description": "Outlook-style email writing practice with coaching and CSV export.",
+    "tags": ["communication", "training"],
+    "entryPath": "./apps/email-composer/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2024-07-01"
   }
 ]

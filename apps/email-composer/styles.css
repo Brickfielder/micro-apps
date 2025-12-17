@@ -1,0 +1,457 @@
+:root {
+  --outlook-blue: #0078d4;
+  --outlook-blue-hover: #106ebe;
+  --ribbon-bg: #f3f2f1;
+  --border-color: #edebe9;
+  --text-color: #323130;
+  --bg: #f0f2f5;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text-color);
+}
+
+#app-root {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Stage Management --- */
+.app-stage {
+  display: none;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.app-stage.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- General Utilities --- */
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.two-col {
+  grid-template-columns: 2.5fr 1fr;
+  align-items: start;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.task-box {
+  text-align: left;
+  background: #f3f2f1;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.start-btn {
+  font-size: 16px;
+  padding: 10px 32px;
+}
+
+.vertical-divider {
+  width: 1px;
+  height: 24px;
+  background: #c8c6c4;
+  margin: 0 8px;
+}
+
+.flex-spacer {
+  flex: 1;
+}
+
+.separator-line {
+  height: 1px;
+  background: #edebe9;
+  width: 100%;
+}
+
+#statusSummary {
+  font-size: 13px;
+  color: #605e5c;
+  font-weight: 500;
+}
+
+/* --- Button Styles --- */
+.btn {
+  appearance: none;
+  border: none;
+  padding: 6px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--outlook-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--outlook-blue-hover);
+}
+
+.btn-secondary {
+  background: white;
+  border: 1px solid #8a8886;
+  color: #323130;
+}
+
+.btn-secondary:hover {
+  background: #edebe9;
+}
+
+/* --- Intro & Debrief Styles --- */
+.intro-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  border-radius: 8px;
+}
+
+.intro-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: var(--outlook-blue);
+}
+
+.intro-icon.success {
+  color: #107c10;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: #201f1e;
+}
+
+p {
+  line-height: 1.5;
+  color: #605e5c;
+}
+
+.notes-section {
+  margin-top: 20px;
+}
+
+#therapistNotes {
+  width: 100%;
+  height: 100px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid #8a8886;
+  box-sizing: border-box;
+}
+
+.debrief-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+/* --- OUTLOOK COMPOSER STYLES --- */
+.outlook-window {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+/* Top Ribbon */
+.ribbon {
+  background: var(--ribbon-bg);
+  padding: 8px 16px;
+  border-bottom: 1px solid #c8c6c4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ribbon-btn {
+  background: transparent;
+  border: none;
+  color: #323130;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  gap: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.ribbon-btn:hover {
+  background: #e1dfdd;
+}
+
+.ribbon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #605e5c;
+}
+
+.send-btn-group {
+  background: var(--outlook-blue);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.send-btn-group:hover {
+  background: var(--outlook-blue-hover);
+}
+
+.send-btn-divider {
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  padding-left: 8px;
+}
+
+/* Email Header Fields */
+.email-headers {
+  padding: 10px 20px;
+  display: grid;
+  gap: 4px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #edebe9;
+  padding: 4px 0;
+}
+
+.header-row.no-border {
+  border-bottom: none;
+}
+
+.header-row label {
+  width: 60px;
+  font-size: 14px;
+  color: #605e5c;
+  font-weight: 500;
+}
+
+.header-row input {
+  flex: 1;
+  border: none;
+  font-size: 14px;
+  padding: 8px;
+  font-family: inherit;
+  outline: none;
+}
+
+.header-row input:focus {
+  background: #fdfdfd;
+}
+
+#fromInput {
+  color: #605e5c;
+}
+
+#subjectInput {
+  font-weight: 600;
+}
+
+/* Editor Area */
+.editor-container {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea.email-body {
+  flex: 1;
+  width: 100%;
+  border: none;
+  resize: none;
+  font-family: "Calibri", "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  outline: none;
+}
+
+/* Actions Bar */
+.actions-bar {
+  padding: 12px 20px;
+  border-top: 1px solid #edebe9;
+  background: #f8f8f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.check-icon {
+  color: var(--outlook-blue);
+}
+
+/* Coach/Sidebar Styles */
+.coach-panel {
+  padding: 20px;
+  background: #f9f9f9;
+  border-left: 1px solid #edebe9;
+  height: 100%;
+}
+
+.coach-panel h2 {
+  font-size: 16px;
+  margin-top: 0;
+  color: var(--outlook-blue);
+}
+
+.coach-description {
+  font-size: 12px;
+  color: #605e5c;
+}
+
+.feedback-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+  display: grid;
+  gap: 8px;
+}
+
+.feedback-item {
+  font-size: 13px;
+  padding: 10px;
+  border-left: 3px solid #ccc;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.feedback-item[data-tone="critical"] {
+  border-color: #d13438;
+}
+
+.feedback-item[data-tone="warning"] {
+  border-color: #ffaa44;
+}
+
+.feedback-item[data-tone="positive"] {
+  border-color: #107c10;
+}
+
+.feedback-item[data-tone="spelling"] {
+  border-color: #a80000;
+  background: #fff4f4;
+}
+
+.checklist {
+  margin-top: 20px;
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
+}
+
+.checklist label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #323130;
+}
+
+.checklist label.custom-item {
+  color: var(--outlook-blue);
+  font-weight: 500;
+}
+
+.checklist-title {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Therapist Notes Area */
+.therapist-area {
+  margin-top: 20px;
+  border-top: 1px solid #e1dfdd;
+  padding-top: 15px;
+}
+
+.therapist-title {
+  font-size: 13px;
+}
+
+.therapist-hint {
+  font-size: 11px;
+  margin: 4px 0 8px 0;
+  color: #605e5c;
+}
+
+#guidanceInput,
+#therapistNotes,
+.therapist-area textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.therapist-area textarea {
+  border: 1px solid #8a8886;
+  padding: 8px;
+  font-size: 13px;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.full-width-btn {
+  width: 100%;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .coach-panel {
+    border-left: none;
+    border-top: 1px solid #edebe9;
+  }
+}
