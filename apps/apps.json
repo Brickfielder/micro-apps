@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "demo-timer",
+    "title": "Demo Timer",
+    "description": "A lightweight focus timer with quick presets and persistence.",
+    "tags": ["productivity", "offline"],
+    "entryPath": "./apps/demo-timer/index.html",
+    "version": "0.1.0",
+    "offlineCapable": true,
+    "lastUpdated": "2024-06-01"
+  }
+]

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Micro Apps | Home</title>
+  <link rel="stylesheet" href="./shared/shell/shell.css" />
+</head>
+<body>
+  <div id="app-root"></div>
+  <script type="module">
+    import { mountShell, registerServiceWorker } from './shared/shell/shell.js';
+    import { createCard, createPill, createGrid } from './shared/ui/components.js';
+    import { formatDate } from './shared/utils/format.js';
+
+    const { content } = mountShell({
+      appTitle: 'Micro Apps',
+      appTagline: 'Tiny utilities with a shared shell',
+    });
+
+    const grid = createGrid();
+    grid.setAttribute('aria-live', 'polite');
+
+    const status = document.createElement('p');
+    status.className = 'muted';
+    status.textContent = 'Loading apps…';
+
+    content.append(status, grid);
+
+    async function loadApps() {
+      try {
+        const response = await fetch('./apps/apps.json');
+        if (!response.ok) throw new Error('Could not load apps manifest');
+        const apps = await response.json();
+        renderApps(apps);
+        status.textContent = `${apps.length} app${apps.length === 1 ? '' : 's'} ready`;
+      } catch (error) {
+        status.textContent = 'Failed to load apps. Please retry when online.';
+        status.setAttribute('role', 'alert');
+        console.error(error);
+      }
+    }
+
+    function renderApps(apps) {
+      grid.replaceChildren();
+      apps.forEach((app) => {
+        const card = createCard({
+          title: app.title,
+          description: app.description,
+          href: app.entryPath,
+        });
+
+        const tagsRow = document.createElement('div');
+        tagsRow.className = 'pill-row';
+
+        (app.tags || []).forEach((tag) => tagsRow.appendChild(createPill(tag)));
+        tagsRow.appendChild(createPill(app.offlineCapable ? 'Offline ready' : 'Online only'));
+        tagsRow.appendChild(createPill(`v${app.version}`));
+
+        const meta = document.createElement('p');
+        meta.className = 'muted';
+        meta.textContent = `Updated ${formatDate(app.lastUpdated)}`;
+
+        card.append(tagsRow, meta);
+        grid.appendChild(card);
+      });
+    }
+
+    loadApps();
+    registerServiceWorker();
+  </script>
+</body>
+</html>
