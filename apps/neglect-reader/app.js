@@ -15,12 +15,14 @@
   const startBtn = document.getElementById('startBtn');
   const restartBtn = document.getElementById('restartBtn');
   const exportBtn = document.getElementById('exportBtn');
+  const commentInput = document.getElementById('clinicianComment');
 
   const pages = Array.from(pagesEl.querySelectorAll('.page'));
 
   const state = {
     pageIndex: 0,
     startTime: null,
+    endTime: null,
     resizeTimer: null,
   };
 
@@ -40,6 +42,11 @@
 
   function currentMode() {
     return modeControl.querySelector('input[name="mode"]:checked')?.value || 'none';
+  }
+
+  function currentModeLabel() {
+    const modeInput = modeControl.querySelector('input[name="mode"]:checked');
+    return modeInput ? modeInput.nextElementSibling.textContent : 'None';
   }
 
   function clearLeadWords(page) {
@@ -156,19 +163,17 @@
 
   function startTask() {
     state.startTime = Date.now();
+    state.endTime = null;
     switchStage('task');
     updateMode();
   }
 
   function endTask() {
-    const endTime = Date.now();
-    const durationLabel = state.startTime ? formatDuration(state.startTime, endTime) : '0:00';
-
-    const modeInput = modeControl.querySelector('input[name="mode"]:checked');
-    const modeLabel = modeInput ? modeInput.nextElementSibling.textContent : 'None';
+    state.endTime = Date.now();
+    const durationLabel = state.startTime ? formatDuration(state.startTime, state.endTime) : '0:00';
 
     document.getElementById('res-time').textContent = durationLabel;
-    document.getElementById('res-mode').textContent = modeLabel;
+    document.getElementById('res-mode').textContent = currentModeLabel();
 
     switchStage('debrief');
   }
@@ -238,9 +243,46 @@
 
     startBtn.addEventListener('click', startTask);
     restartBtn.addEventListener('click', () => window.location.reload());
-    exportBtn.addEventListener('click', () => alert('Data exported to clinician dashboard.'));
+    exportBtn.addEventListener('click', exportResults);
 
     window.addEventListener('resize', handleResize);
+  }
+
+  function exportResults() {
+    const endTime = state.endTime || Date.now();
+    const durationSeconds = state.startTime ? Math.round((endTime - state.startTime) / 1000) : 0;
+
+    const entries = {
+      'Start Time': state.startTime ? new Date(state.startTime).toISOString() : '',
+      'End Time': new Date(endTime).toISOString(),
+      'Duration (seconds)': durationSeconds,
+      'Duration (label)': state.startTime ? formatDuration(state.startTime, endTime) : '0:00',
+      'Mode Used': currentModeLabel(),
+      'Pages Read': `${state.pageIndex + 1} of ${pages.length}`,
+      'Clinician Comment': commentInput.value.trim(),
+    };
+
+    const headers = Object.keys(entries);
+    const row = headers
+      .map((key) => {
+        const value = entries[key];
+        const escaped = String(value ?? '').replace(/"/g, '""');
+        return `"${escaped}"`;
+      })
+      .join(',');
+
+    const csvContent = `${headers.join(',')}
+${row}`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'neglect-reader-results.csv';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
   function init() {
