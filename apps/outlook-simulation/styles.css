@@ -1,0 +1,380 @@
+:root {
+  --outlook-blue: #0a6ed1;
+  --outlook-bg: #f6f7fb;
+  --outlook-hover: #eef1f6;
+  --outlook-selected: #d8e7fb;
+  --text-dark: #1f2933;
+  --text-meta: #5f6b76;
+  --border-light: #e5e7eb;
+}
+
+body {
+  background: var(--outlook-bg);
+  color: var(--text-dark);
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.app-shell-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.app-stage {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.stage-body {
+  display: flex;
+  min-height: 640px;
+}
+
+/* Intro */
+.instruction-wrapper {
+  display: grid;
+  place-items: center;
+  padding: 32px 24px;
+  background: var(--outlook-bg);
+}
+
+.instruction-card {
+  width: min(960px, 100%);
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+  padding: 32px 40px;
+  text-align: center;
+  display: grid;
+  gap: 20px;
+}
+
+.instruction-icon {
+  font-size: 40px;
+}
+
+.instruction-title {
+  margin: 0;
+  font-size: 28px;
+}
+
+.instruction-desc {
+  margin: 0;
+  color: var(--text-meta);
+}
+
+.task-panel {
+  background: #f2f4f7;
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.primary-btn {
+  align-self: center;
+  border: none;
+  border-radius: 8px;
+  background: var(--outlook-blue);
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 28px;
+  transition: background 150ms ease, transform 150ms ease;
+}
+
+.primary-btn:hover {
+  background: #085aa7;
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* Layout */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-light);
+  background: #fbfbfd;
+}
+
+.toolbar-label {
+  margin-left: auto;
+  color: var(--text-meta);
+  font-size: 13px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: white;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.action-btn:hover {
+  background: var(--outlook-hover);
+}
+
+.action-btn.delete:hover {
+  color: #b42318;
+  background: #fef1f2;
+  border-color: #f9d4d9;
+}
+
+.action-btn.archive:hover {
+  color: #8a6116;
+  background: #fff7e0;
+  border-color: #f3e6bc;
+}
+
+.action-btn.reply:hover {
+  color: #0f7b10;
+  background: #e7f6e8;
+  border-color: #c7e8c9;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 220px 320px 1fr;
+  min-height: 640px;
+}
+
+@media (max-width: 1080px) {
+  .workspace {
+    grid-template-columns: 200px 280px 1fr;
+  }
+}
+
+@media (max-width: 880px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .folder-pane,
+  .email-list-pane {
+    display: none;
+  }
+}
+
+.folder-pane {
+  background: #f3f4f6;
+  border-right: 1px solid var(--border-light);
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.folder-item {
+  padding: 10px 18px;
+  font-weight: 600;
+  color: var(--text-meta);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.folder-item.active {
+  color: var(--text-dark);
+  background: var(--outlook-selected);
+  border-left: 4px solid var(--outlook-blue);
+}
+
+.email-list-pane {
+  border-right: 1px solid var(--border-light);
+  background: white;
+  overflow-y: auto;
+}
+
+.email-preview {
+  position: relative;
+  padding: 12px 14px 12px 58px;
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: background 120ms ease, padding-left 120ms ease, border-left 120ms ease;
+}
+
+.email-preview:hover {
+  background: var(--outlook-hover);
+}
+
+.email-preview.selected {
+  background: var(--outlook-selected);
+  border-left: 4px solid var(--outlook-blue);
+  padding-left: 54px;
+}
+
+.avatar-circle {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--outlook-blue);
+  color: white;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+.preview-sender {
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.preview-subject {
+  margin: 0 0 4px;
+  color: var(--text-dark);
+}
+
+.preview-snippet {
+  margin: 0;
+  color: var(--text-meta);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time-stamp {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: var(--text-meta);
+  font-size: 11px;
+}
+
+.reading-pane {
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.email-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.message-header {
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.msg-subject {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.msg-from {
+  margin: 0 0 4px;
+  color: var(--text-meta);
+  font-size: 14px;
+}
+
+.msg-to {
+  margin: 0;
+  color: var(--text-meta);
+  font-size: 13px;
+}
+
+.msg-body {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Results */
+.results-screen {
+  padding: 24px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  padding: 16px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: #f9fafb;
+  text-align: center;
+}
+
+.stat-label {
+  color: var(--text-meta);
+  font-size: 12px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.report-table th,
+.report-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.report-table thead {
+  background: #f3f4f6;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.badge.correct {
+  background: #e7f6e8;
+  color: #0f7b10;
+}
+
+.badge.wrong {
+  background: #fef1f2;
+  color: #b42318;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.table-actions button {
+  margin: 0 6px;
+}
