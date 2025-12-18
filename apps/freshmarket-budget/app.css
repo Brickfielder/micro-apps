@@ -156,3 +156,29 @@ th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
 .fail { color: var(--danger); font-weight: bold; }
 
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+
+/* Harmonise with shared stages */
+body {
+    background: transparent;
+    color: var(--text-main);
+    display: block;
+    height: auto;
+}
+
+.app-layout .card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+}
+
+.main-layout {
+    width: 100%;
+}
+
+.small-note {
+    font-size: 12px;
+}
+
+.summary-card table th,
+.summary-card table td {
+    color: var(--text-main);
+}

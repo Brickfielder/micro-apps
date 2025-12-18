@@ -1,18 +1,15 @@
-.timer-card {
-  display: grid;
-  gap: var(--space-4);
-}
-
 .timer-display {
-  font-size: 3rem;
+  font-size: clamp(2.5rem, 4vw, 3.4rem);
   font-variant-numeric: tabular-nums;
   letter-spacing: 2px;
+  text-align: center;
 }
 
 .timer-controls {
   display: flex;
   gap: var(--space-3);
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .timer-presets {
@@ -21,23 +18,20 @@
   flex-wrap: wrap;
 }
 
-.input-row {
-  display: flex;
-  gap: var(--space-2);
-  align-items: center;
-}
-
 input[type='number'] {
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
-  width: 80px;
+  width: 120px;
 }
 
-label span {
-  color: var(--muted);
-  display: inline-block;
-  margin-bottom: 4px;
+textarea {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
 }

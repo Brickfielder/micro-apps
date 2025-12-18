@@ -37,9 +37,27 @@ let cart = [];
 const BUDGET_LIMIT = 25.00;
 let startTime = 0;
 
+function showStage(id) {
+    const stages = ['intro-screen', 'stage-task', 'report-screen'];
+    stages.forEach(stageId => {
+        const el = document.getElementById(stageId);
+        if (!el) return;
+        el.classList.remove('active');
+    });
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+}
+
+function formatDuration(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${seconds}`;
+}
+
 // --- INIT ---
 function startGame() {
-    document.getElementById('intro-screen').classList.add('hidden');
+    showStage('stage-task');
     startTime = Date.now();
     renderShop();
 }
@@ -163,13 +181,15 @@ function finishShop() {
     if(hasFruit) itemsFound++;
 
     // 4. Render Report
-    document.getElementById('report-screen').classList.remove('hidden');
+    showStage('report-screen');
 
     const budgetRes = document.getElementById('res-budget');
     budgetRes.innerText = budgetOk ? "PASS" : "FAIL (Over Budget)";
     budgetRes.style.color = budgetOk ? "var(--primary)" : "var(--danger)";
 
     document.getElementById('res-items').innerText = `${itemsFound}/6`;
+    const elapsed = startTime ? Date.now() - startTime : 0;
+    document.getElementById('res-time').innerText = formatDuration(elapsed);
 
     const tbody = document.getElementById('res-body');
     tbody.innerHTML = '';
