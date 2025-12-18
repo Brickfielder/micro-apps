@@ -6,46 +6,213 @@
   <title>Micro Apps | Home</title>
   <link rel="stylesheet" href="./shared/shell/shell.css" />
   <style>
-    /* Add specific styles for the dashboard layout here */
+    :root {
+      --home-bg: #f7f8fc;
+      --home-card: #ffffff;
+      --home-border: #e5e7eb;
+      --home-text: #111827;
+      --home-muted: #6b7280;
+      --home-accent: #7c3aed;
+      --home-pill: #f3f4f6;
+      --home-radius: 20px;
+      --home-shadow: 0 15px 40px rgba(17, 24, 39, 0.08);
+    }
+
+    body {
+      background: var(--home-bg);
+      color: var(--home-text);
+    }
+
+    .app-frame {
+      max-width: 1200px;
+      padding: 48px 24px 64px;
+    }
+
+    header.app-header {
+      background: linear-gradient(120deg, rgba(124, 58, 237, 0.08), rgba(59, 130, 246, 0.05));
+      color: var(--home-text);
+      border: 1px solid var(--home-border);
+      box-shadow: 0 10px 30px rgba(148, 163, 184, 0.18);
+    }
+
+    .app-logo {
+      background: rgba(124, 58, 237, 0.12);
+      color: #6d28d9;
+      border-color: rgba(124, 58, 237, 0.35);
+    }
+
+    .app-meta p {
+      color: var(--home-muted);
+    }
+
+    .nav-links a,
+    .nav-links a[aria-current='page'] {
+      background: #fff;
+      border-color: var(--home-border);
+      color: var(--home-text);
+    }
+
+    .main-content {
+      gap: 1.5rem;
+    }
+
     .controls-row {
       display: flex;
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .search-input {
       flex: 1;
-      padding: 0.5rem;
-      min-width: 200px;
+      padding: 0.9rem 1rem;
+      min-width: 240px;
+      border: 1px solid var(--home-border);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: #fff;
+      color: var(--home-text);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
     }
 
-    .skeleton {
-      background-color: #eee;
-      color: transparent;
-      border-radius: 4px;
-      animation: pulse 1.5s infinite;
+    .muted {
+      color: var(--home-muted);
     }
 
-    @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
-    }
-
-    /* Ensure the grid adapts to mobile screens */
-    .grid {
+    .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.5rem;
       width: 100%;
     }
 
-    /* Push footer to bottom of card */
-    .card {
+    .card.app-card {
       display: flex;
       flex-direction: column;
-      height: 100%;
+      gap: 0.5rem;
+      background: var(--home-card);
+      border: 1px solid var(--home-border);
+      border-radius: var(--home-radius);
+      padding: 20px;
+      box-shadow: var(--home-shadow);
+      color: var(--home-text);
+    }
+
+    .card.app-card:hover,
+    .card.app-card:focus-within {
+      transform: translateY(-2px);
+      border-color: rgba(124, 58, 237, 0.35);
+      box-shadow: 0 18px 50px rgba(17, 24, 39, 0.1);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-chip {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #f1f5f9;
+      font-size: 1.4rem;
+    }
+
+    .pill {
+      background: var(--home-pill);
+      border: 1px solid var(--home-border);
+      color: var(--home-text);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .pill.offline {
+      background: #ecfdf3;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--home-text);
+    }
+
+    .card .description {
+      color: var(--home-muted);
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0.25rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      color: var(--home-text);
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 600;
+    }
+
+    .feature-list .label {
+      color: var(--home-muted);
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: auto;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, #7c3aed, #6366f1);
+      color: #fff;
+      border-color: transparent;
+      padding: 10px 16px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .meta {
+      color: var(--home-muted);
+      font-size: 0.9rem;
+    }
+
+    .skeleton {
+      background-color: #e5e7eb;
+      color: transparent;
+      border-radius: var(--home-radius);
+      animation: pulse 1.5s infinite;
+      box-shadow: var(--home-shadow);
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.7;
+      }
     }
   </style>
 </head>
@@ -55,6 +222,20 @@
     import { mountShell, registerServiceWorker } from './shared/shell/shell.js';
     import { createCard, createPill, createGrid } from './shared/ui/components.js';
     import { formatDate } from './shared/utils/format.js';
+
+    document.body.classList.add('home-theme');
+
+    const iconMap = {
+      'demo-timer': '⏱️',
+      'email-composer': '✉️',
+      'neglect-reader': '📖',
+      'emotion-chat': '💬',
+      'cashpoint-coach': '🏧',
+      'outlook-simulation': '📧',
+      'freshmarket-budget': '🛒',
+      'metro-nav': '🗺️',
+      'cafe-rush': '☕',
+    };
 
     // 1. Setup the Shell
     const { content } = mountShell({
@@ -145,40 +326,19 @@
       }
 
       apps.forEach((app) => {
+        const primaryTag = (app.tags && app.tags[0]) || 'Focus';
+        const icon = iconMap[app.slug] || '✨';
+
         const card = createCard({
           title: app.title,
           description: app.description,
           href: app.entryPath,
+          icon,
+          tag: primaryTag,
+          offline: app.offlineCapable,
+          version: app.version,
+          updated: formatDate(app.lastUpdated),
         });
-
-        const footer = document.createElement('div');
-        footer.style.marginTop = 'auto';
-
-        const tagsRow = document.createElement('div');
-        tagsRow.className = 'pill-row';
-
-        if (app.offlineCapable) {
-          const wifiPill = createPill('Offline Ready');
-          tagsRow.appendChild(wifiPill);
-        }
-
-        (app.tags || []).forEach((tag) => tagsRow.appendChild(createPill(tag)));
-
-        const meta = document.createElement('div');
-        meta.className = 'muted small-text';
-        meta.style.display = 'flex';
-        meta.style.justifyContent = 'space-between';
-        meta.style.marginTop = '1rem';
-
-        const ver = document.createElement('span');
-        ver.textContent = `v${app.version}`;
-
-        const date = document.createElement('span');
-        date.textContent = formatDate(app.lastUpdated);
-
-        meta.append(ver, date);
-        footer.append(tagsRow, meta);
-        card.appendChild(footer);
 
         grid.appendChild(card);
       });
