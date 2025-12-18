@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inbox Simulator</title>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="../shared/frame.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header id="appHeader" class="app-header hidden">
+    <div class="brand-area">
+      <span aria-hidden="true">▦</span>
+      <span>Outlook Sim</span>
+    </div>
+    <div class="session-actions">
+      <span class="user-label">Logged in as: You</span>
+      <button id="finishBtn" class="finish-btn" type="button">Finish Session</button>
+    </div>
+  </header>
+
+  <main class="viewport">
+    <section id="viewStart" class="full-screen start-screen">
+      <div class="card-center">
+        <h1>📥 Inbox Simulator</h1>
+        <p>Welcome to your professional email training environment.</p>
+        <hr />
+        <ul>
+          <li><strong>The Scenario:</strong> You have 5 unread emails in your inbox.</li>
+          <li><strong>The Goal:</strong> Reply to as many as you can. Pay attention to the specific needs of the sender.</li>
+          <li><strong>The Coach:</strong> A real-time AI assistant will grade your tone, spelling, and content as you type.</li>
+          <li><strong>Completion:</strong> You can finish the session whenever you feel you have practiced enough.</li>
+        </ul>
+        <button id="startBtn" class="btn btn-primary btn-large" type="button">Start Inbox</button>
+      </div>
+    </section>
+
+    <section id="viewWorkspace" class="container hidden">
+      <aside class="sidebar">
+        <div class="folder-pane">Inbox (<span id="inboxCount">5</span>)</div>
+        <div class="email-list" id="emailList"></div>
+      </aside>
+
+      <section class="main-stage" id="mainStage">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon" aria-hidden="true">✉️</div>
+          <h3>Select an email to read</h3>
+          <p>Choose a scenario from the inbox on the left.</p>
+        </div>
+
+        <div id="activeScenario" class="hidden scenario">
+          <div class="reading-pane">
+            <div class="email-meta">
+              <div class="avatar" id="avatar">JS</div>
+              <div class="meta-text">
+                <h2 id="incomingSender">Sender Name</h2>
+                <p id="incomingSubject" class="subject-line">Subject Line</p>
+              </div>
+            </div>
+            <div class="email-content" id="incomingBody"></div>
+            <div class="reply-row">
+              <button id="replyBtn" class="btn btn-secondary" type="button">↩ Reply</button>
+            </div>
+          </div>
+
+          <div id="composerArea" class="composer hidden">
+            <div class="composer-toolbar">
+              <button id="sendBtn" class="btn btn-primary" type="button">Send</button>
+              <button id="discardBtn" class="btn" type="button">🗑️ Discard</button>
+            </div>
+            <div class="composer-headers">
+              <div class="input-group">
+                <span class="input-label">To:</span>
+                <input type="text" id="toInput" class="input-field" readonly />
+              </div>
+              <div class="input-group">
+                <span class="input-label">Subject:</span>
+                <input type="text" id="subjectInput" class="input-field" />
+              </div>
+            </div>
+            <label class="sr-only" for="editor">Email body</label>
+            <textarea id="editor" class="editor" placeholder="Type your reply here..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <aside class="coach-sidebar" id="coachSidebar">
+        <div class="coach-header">
+          <h3>Editor Score</h3>
+          <div class="score-circle" id="scoreCircle">100</div>
+        </div>
+        <h4>Suggestions</h4>
+        <div id="suggestionList"></div>
+        <h4>Scenario Goals</h4>
+        <div id="goalsList"></div>
+      </aside>
+    </section>
+
+    <section id="viewSummary" class="full-screen hidden">
+      <div class="card-center">
+        <h1 class="success">Session Complete</h1>
+        <p>Here is a summary of your performance.</p>
+
+        <div class="stat-row">
+          <div>
+            <span class="stat-val" id="resTasks">0</span>
+            <span class="stat-label">Emails Sent</span>
+          </div>
+          <div>
+            <span class="stat-val" id="resTime">00:00</span>
+            <span class="stat-label">Duration</span>
+          </div>
+        </div>
+
+        <div class="summary-actions">
+          <button id="downloadBtn" class="btn btn-primary btn-large" type="button">Download Data</button>
+          <button id="restartBtn" class="btn btn-secondary btn-large" type="button">Restart</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span id="toastMessage">Sending email...</span>
+    <button id="undoBtn" class="undo-btn" type="button">Undo</button>
+  </div>
+</body>
+</html>

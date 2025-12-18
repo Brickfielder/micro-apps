@@ -88,5 +88,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2025-04-01"
+  },
+  {
+    "slug": "inbox-simulator",
+    "title": "Inbox Simulator",
+    "description": "Practice responding to realistic inbox scenarios with live tone, spelling, and goal guidance.",
+    "tags": ["training", "communication"],
+    "entryPath": "./apps/inbox-simulator/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2025-05-01"
   }
 ]
