@@ -1,15 +1,5 @@
 [
   {
-    "slug": "email-composer",
-    "title": "Email Composer Coach",
-    "description": "Outlook-style email writing practice with coaching and CSV export.",
-    "tags": ["communication", "training"],
-    "entryPath": "./apps/email-composer/index.html",
-    "version": "0.1.0",
-    "offlineCapable": false,
-    "lastUpdated": "2024-07-01"
-  },
-  {
     "slug": "outlook-simulation",
     "title": "Outlook Simulation",
     "description": "Triage 20 inbox messages quickly and choose the best action for each.",
@@ -17,7 +7,7 @@
     "entryPath": "./apps/outlook-simulation/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
-    "lastUpdated": "2025-06-01"
+    "lastUpdated": "2025-12-18"
   },
   {
     "slug": "freshmarket-budget",
@@ -27,7 +17,7 @@
     "entryPath": "./apps/freshmarket-budget/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
-    "lastUpdated": "2025-02-01"
+    "lastUpdated": "2025-12-18"
   },
   {
     "slug": "metro-nav",
@@ -37,7 +27,7 @@
     "entryPath": "./apps/metro-nav/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
-    "lastUpdated": "2025-03-01"
+    "lastUpdated": "2025-12-18"
   },
   {
     "slug": "cafe-rush",
@@ -47,7 +37,7 @@
     "entryPath": "./apps/cafe-rush/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
-    "lastUpdated": "2025-04-01"
+    "lastUpdated": "2025-12-18"
   },
   {
     "slug": "inbox-simulator",
@@ -57,6 +47,6 @@
     "entryPath": "./apps/inbox-simulator/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
-    "lastUpdated": "2025-05-01"
+    "lastUpdated": "2025-12-18"
   }
 ]
