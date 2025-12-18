@@ -33,7 +33,8 @@ const state = {
 
 const { content } = mountShell({
   appTitle: 'Outlook Simulation',
-  appTagline: 'Triage 20 inbox messages and choose the best action.'
+  appTagline: 'Triage 20 inbox messages and choose the best action.',
+  includeHomeLink: false
 });
 
 content.classList.add('app-shell-content');
