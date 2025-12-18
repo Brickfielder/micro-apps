@@ -1,8 +1,4 @@
-import { mountShell } from '../../shared/shell/shell.js';
-import { AppWorkflow } from '../../shared/shell/workflow.js';
-import { createButton } from '../../shared/ui/components.js';
-
-// --- Data ---
+// --- 20 ITEM DATASET ---
 const emails = [
     // 1. ACTION (Clear Tasks)
     { id: 1, from: "Mom", subject: "Call me back", body: "Hi, please give me a ring when you have a moment.", cat: "Action", correct: "action", time: "09:00" },
@@ -38,309 +34,139 @@ const emails = [
 
     // Trap D: Distractor (Looks like Emergency, is Joke)
     { id: 20, from: "Best Friend", subject: "URGENT!!!", body: "Just kidding. Wanted to get your attention. Lunch?", cat: "Trap (Distractor)", correct: "delete", time: "10:35" }
+    // Note: Trap D is subjective, but in a work sim, deleting personal distractions is usually 'Correct'.
+    // We will accept Delete or Archive for #20 in logic below.
 ];
 
-// --- State ---
-let sessionState = {
-    currentIndex: 0,
-    results: [],
-    startTime: 0,
-    emailStartTime: 0,
-    totalTimeFormatted: '00:00'
-};
+// --- STATE ---
+let currentIndex = 0;
+let results = [];
+let startTime = 0;
+let emailStartTime = 0;
+let timerInt;
 
-// --- Shell Setup ---
-const { content } = mountShell({
-  appTitle: 'Outlook Simulation',
-  appTagline: 'Triage 20 inbox messages quickly and choose the best action.',
-  navLinks: [{ href: '../../index.html', label: 'Home' }],
-});
+// --- ELEMENTS ---
+const uiList = document.getElementById('email-list');
+const uiSubject = document.getElementById('disp-subject');
+const uiFrom = document.getElementById('disp-from');
+const uiBody = document.getElementById('disp-body');
+const uiCount = document.getElementById('count-display');
+const uiTimer = document.getElementById('timer');
 
-// --- Workflow Views ---
+// --- LOGIC ---
 
-// 1. Instructions View
-function createInstructions(workflow) {
-  const container = document.createElement('div');
-  container.className = 'overlay-screen';
-  container.id = 'screen-intro';
-
-  container.innerHTML = `
-        <div class="card">
-            <h1 style="color:var(--outlook-blue); margin-top:0;">Outlook Simulation</h1>
-            <p><strong>Scenario:</strong> You have returned to work after a week off. Your inbox has 20 unread items.</p>
-            <p><strong>Your Task:</strong> Clear the inbox completely by processing one email at a time.</p>
-            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            <p>For each email, choose the BEST action:</p>
-            <ul style="line-height:1.6;">
-                <li>🗑️ <strong>DELETE:</strong> Spam, Junk, or irrelevant notifications.</li>
-                <li>📂 <strong>ARCHIVE:</strong> Information to keep (Receipts, FYIs, "Closed" notices). No response needed.</li>
-                <li>⚡ <strong>REPLY / ACTION:</strong> Requires you to do something, reply, or is marked Urgent.</li>
-            </ul>
-            <div style="text-align:center;">
-            </div>
-        </div>
-  `;
-
-  const startBtn = createButton('Start Assessment', { variant: 'primary' });
-  startBtn.className = 'btn-primary';
-  startBtn.addEventListener('click', () => {
-      sessionState.currentIndex = 0;
-      sessionState.results = [];
-      sessionState.startTime = Date.now();
-      sessionState.emailStartTime = Date.now();
-      workflow.changeStep('task');
-  });
-
-  container.querySelector('.card > div').appendChild(startBtn);
-
-  return container;
-}
-
-// 2. Task View
-function createTask(workflow) {
-    const container = document.createElement('div');
-    // Using main-container class from styles.css but wrapping it
-
-    // Header for Timer
-    const header = document.createElement('div');
-    header.className = 'app-header';
-    header.innerHTML = `
-        <span style="margin-right: 15px;">:::</span>
-        <span>Outlook Simulation</span>
-        <span style="flex:1;"></span>
-        <span id="timer" style="font-weight: normal; font-size: 14px;">00:00</span>
-    `;
-
-    const mainContainer = document.createElement('div');
-    mainContainer.className = 'main-container';
-
-    mainContainer.innerHTML = `
-        <div class="folder-pane">
-            <div class="folder-item active">Inbox <span id="count-display" style="float:right; font-weight:bold; color:var(--outlook-blue)">20</span></div>
-            <div class="folder-item">Sent Items</div>
-            <div class="folder-item">Drafts</div>
-            <div class="folder-item">Archive</div>
-            <div class="folder-item">Deleted Items</div>
-        </div>
-
-        <div class="email-list-pane" id="email-list">
-            </div>
-
-        <div class="reading-pane">
-            <div class="toolbar">
-                <button class="tool-btn btn-delete" id="btn-delete">
-                    🗑️ Delete
-                </button>
-                <button class="tool-btn btn-archive" id="btn-archive">
-                    📂 Archive
-                </button>
-                <button class="tool-btn btn-action" id="btn-action">
-                    ⚡ Reply / Action
-                </button>
-                <span style="flex:1;"></span>
-                <span style="font-size:12px; color:var(--text-meta);">Assessment Mode</span>
-            </div>
-
-            <div class="email-content" id="email-view">
-                <div class="message-header">
-                    <div class="msg-subject" id="disp-subject"></div>
-                    <div class="msg-from" id="disp-from"></div>
-                    <div class="msg-to">To: You</div>
-                </div>
-                <div class="msg-body" id="disp-body"></div>
-            </div>
-        </div>
-    `;
-
-    container.append(header, mainContainer);
-
-    // Elements
-    const uiList = mainContainer.querySelector('#email-list');
-    const uiSubject = mainContainer.querySelector('#disp-subject');
-    const uiFrom = mainContainer.querySelector('#disp-from');
-    const uiBody = mainContainer.querySelector('#disp-body');
-    const uiCount = mainContainer.querySelector('#count-display');
-    const uiTimer = header.querySelector('#timer');
-
-    let timerInt;
-
-    // Logic
-    function updateTimer() {
-        const sec = Math.floor((Date.now() - sessionState.startTime) / 1000);
-        const m = Math.floor(sec / 60).toString().padStart(2,'0');
-        const s = (sec % 60).toString().padStart(2,'0');
-        uiTimer.innerText = `${m}:${s}`;
-        sessionState.totalTimeFormatted = `${m}:${s}`;
-    }
-
-    function renderList() {
-        uiList.innerHTML = '';
-        emails.forEach((e, idx) => {
-            // If processed, hide it
-            if (idx < sessionState.currentIndex) return;
-
-            const initial = e.from.charAt(0).toUpperCase();
-            const isActive = idx === sessionState.currentIndex ? 'selected' : '';
-
-            const html = `
-            <div class="email-preview ${isActive}" id="email-${idx}">
-                <div class="avatar-circle">${initial}</div>
-                <div class="preview-sender bold">${e.from}</div>
-                <div class="preview-subject">${e.subject}</div>
-                <div class="preview-snippet">${e.body}</div>
-                <div class="time-stamp">${e.time}</div>
-            </div>
-            `;
-            uiList.insertAdjacentHTML('beforeend', html);
-        });
-        uiCount.innerText = emails.length - sessionState.currentIndex;
-    }
-
-    function loadEmail(idx) {
-        if (idx >= emails.length) {
-            endGame();
-            return;
-        }
-        const e = emails[idx];
-        uiSubject.innerText = e.subject;
-        uiFrom.innerText = e.from;
-        uiBody.innerText = e.body;
-
-        // Reset local timer for this specific email
-        sessionState.emailStartTime = Date.now();
-        renderList();
-    }
-
-    function handleAction(userAction) {
-        const e = emails[sessionState.currentIndex];
-        const timeTaken = Date.now() - sessionState.emailStartTime;
-
-        // Logic Check
-        let isCorrect = (userAction === e.correct);
-
-        // Exception for "URGENT" joke (ID 20): Delete or Archive is fine, just don't Action.
-        if (e.id === 20 && (userAction === 'delete' || userAction === 'archive')) {
-            isCorrect = true;
-        }
-
-        // Exception for "Welcome New Hire" (ID 19): Archive is best, Delete is OK. Action is Fail.
-        if (e.id === 19 && (userAction === 'delete' || userAction === 'archive')) {
-            isCorrect = true;
-        }
-
-        sessionState.results.push({
-            id: e.id,
-            cat: e.cat,
-            userAction: userAction,
-            correctAction: e.correct,
-            isCorrect: isCorrect,
-            timeMs: timeTaken
-        });
-
-        sessionState.currentIndex++;
-        loadEmail(sessionState.currentIndex);
-    }
-
-    function endGame() {
-        clearInterval(timerInt);
-        workflow.changeStep('stats');
-    }
-
-    // Bindings
-    mainContainer.querySelector('#btn-delete').addEventListener('click', () => handleAction('delete'));
-    mainContainer.querySelector('#btn-archive').addEventListener('click', () => handleAction('archive'));
-    mainContainer.querySelector('#btn-action').addEventListener('click', () => handleAction('action'));
-
-    // Init
+function startGame() {
+    document.getElementById('screen-intro').classList.add('hidden');
+    startTime = Date.now();
+    emailStartTime = Date.now();
     timerInt = setInterval(updateTimer, 1000);
     renderList();
-    loadEmail(sessionState.currentIndex);
-
-    return container;
+    loadEmail(0);
 }
 
-// 3. Stats View
-function createStats(workflow) {
-    const container = document.createElement('div');
-    container.className = 'overlay-screen';
-    container.id = 'screen-report';
-    container.classList.remove('hidden'); // ensure visible
+function updateTimer() {
+    const sec = Math.floor((Date.now() - startTime) / 1000);
+    const m = Math.floor(sec / 60).toString().padStart(2,'0');
+    const s = (sec % 60).toString().padStart(2,'0');
+    uiTimer.innerText = `${m}:${s}`;
+}
+
+function renderList() {
+    uiList.innerHTML = '';
+    emails.forEach((e, idx) => {
+        // If processed, hide it
+        if (idx < currentIndex) return;
+
+        const initial = e.from.charAt(0).toUpperCase();
+        const isActive = idx === currentIndex ? 'selected' : '';
+
+        const html = `
+        <div class="email-preview ${isActive}" id="email-${idx}">
+            <div class="avatar-circle">${initial}</div>
+            <div class="preview-sender bold">${e.from}</div>
+            <div class="preview-subject">${e.subject}</div>
+            <div class="preview-snippet">${e.body}</div>
+            <div class="time-stamp">${e.time}</div>
+        </div>
+        `;
+        uiList.insertAdjacentHTML('beforeend', html);
+    });
+    uiCount.innerText = emails.length - currentIndex;
+}
+
+function loadEmail(idx) {
+    if (idx >= emails.length) {
+        endGame();
+        return;
+    }
+    const e = emails[idx];
+    uiSubject.innerText = e.subject;
+    uiFrom.innerText = e.from;
+    uiBody.innerText = e.body;
+
+    // Reset local timer for this specific email
+    emailStartTime = Date.now();
+    renderList(); // Re-render to update 'selected' state and hide processed
+}
+
+function handleAction(userAction) {
+    const e = emails[currentIndex];
+    const timeTaken = Date.now() - emailStartTime;
+
+    // Logic Check
+    let isCorrect = (userAction === e.correct);
+
+    // Exception for "URGENT" joke (ID 20): Delete or Archive is fine, just don't Action.
+    if (e.id === 20 && (userAction === 'delete' || userAction === 'archive')) {
+        isCorrect = true;
+    }
+
+    // Exception for "Welcome New Hire" (ID 19): Archive is best, Delete is OK. Action is Fail.
+    if (e.id === 19 && (userAction === 'delete' || userAction === 'archive')) {
+        isCorrect = true;
+    }
+
+    results.push({
+        id: e.id,
+        cat: e.cat,
+        userAction: userAction,
+        correctAction: e.correct,
+        isCorrect: isCorrect,
+        timeMs: timeTaken
+    });
+
+    currentIndex++;
+    loadEmail(currentIndex);
+}
+
+function endGame() {
+    clearInterval(timerInt);
+    document.getElementById('screen-report').classList.remove('hidden');
 
     // CALC STATS
-    const totalCorrect = sessionState.results.filter(r => r.isCorrect).length;
+    const totalCorrect = results.filter(r => r.isCorrect).length;
     const accuracy = Math.round((totalCorrect / emails.length) * 100);
-    const totalTime = Date.now() - sessionState.startTime;
+    const totalTime = Date.now() - startTime;
     const avgSpeed = Math.round((totalTime / emails.length) / 1000 * 10) / 10;
 
-    // Build Rows
-    let rowsHTML = '';
-    sessionState.results.forEach((r, idx) => {
+    document.getElementById('score-accuracy').innerText = accuracy + "%";
+    document.getElementById('score-time').innerText = uiTimer.innerText;
+    document.getElementById('score-speed').innerText = avgSpeed + "s";
+
+    // POPULATE TABLE
+    const tbody = document.getElementById('report-body');
+    results.forEach((r, idx) => {
+        const tr = document.createElement('tr');
         const badgeClass = r.isCorrect ? 'badge-correct' : 'badge-wrong';
-        rowsHTML += `
-            <tr>
-                <td>${idx + 1}</td>
-                <td>${r.cat}</td>
-                <td><span class="badge ${badgeClass}">${r.userAction.toUpperCase()}</span></td>
-                <td>${r.correctAction.toUpperCase()}</td>
-                <td>${(r.timeMs/1000).toFixed(1)}s</td>
-            </tr>
+        const label = r.isCorrect ? 'PASS' : 'FAIL';
+
+        tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${r.cat}</td>
+            <td><span class="badge ${badgeClass}">${r.userAction.toUpperCase()}</span></td>
+            <td>${r.correctAction.toUpperCase()}</td>
+            <td>${(r.timeMs/1000).toFixed(1)}s</td>
         `;
+        tbody.appendChild(tr);
     });
-
-    container.innerHTML = `
-        <div class="card" style="max-width:800px; max-height: 90vh; overflow-y:auto;">
-            <h2 style="margin-top:0;">Assessment Complete</h2>
-            <div style="display:flex; justify-content:space-around; margin-bottom:20px; background:#f9f9f9; padding:15px; border-radius:4px;">
-                <div>
-                    <div style="font-size:12px; color:gray;">ACCURACY</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-accuracy">${accuracy}%</div>
-                </div>
-                <div>
-                    <div style="font-size:12px; color:gray;">TOTAL TIME</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-time">${sessionState.totalTimeFormatted}</div>
-                </div>
-                <div>
-                    <div style="font-size:12px; color:gray;">AVG SPEED</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-speed">${avgSpeed}s</div>
-                </div>
-            </div>
-
-            <table class="report-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Category</th>
-                        <th>Your Action</th>
-                        <th>Correct Action</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody id="report-body">
-                   ${rowsHTML}
-                </tbody>
-            </table>
-
-            <div style="text-align:center;">
-            </div>
-        </div>
-    `;
-
-    const restartBtn = createButton('Restart', { variant: 'primary' });
-    restartBtn.className = 'btn-primary';
-    restartBtn.addEventListener('click', () => {
-         workflow.changeStep('instructions');
-    });
-
-    container.querySelector('.card > div:last-child').appendChild(restartBtn);
-
-    return container;
 }
-
-
-// --- Initialize Workflow ---
-const workflow = new AppWorkflow({ container: content });
-workflow.init({
-  instructions: createInstructions,
-  task: createTask,
-  stats: createStats,
-});
