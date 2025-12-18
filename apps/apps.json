@@ -48,5 +48,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2024-11-01"
+  },
+  {
+    "slug": "outlook-simulation",
+    "title": "Outlook Simulation",
+    "description": "Triage 20 inbox messages quickly and choose the best action for each.",
+    "tags": ["training", "productivity"],
+    "entryPath": "./apps/outlook-simulation/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2024-12-01"
   }
 ]
