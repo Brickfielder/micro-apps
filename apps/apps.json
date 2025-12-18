@@ -58,5 +58,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2024-12-01"
+  },
+  {
+    "slug": "freshmarket-budget",
+    "title": "FreshMarket Budget Shop",
+    "description": "Refine budgeting and substitution choices while completing a family meal list.",
+    "tags": ["cognition", "planning"],
+    "entryPath": "./apps/freshmarket-budget/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2025-02-01"
   }
 ]
