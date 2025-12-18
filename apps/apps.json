@@ -78,5 +78,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2025-03-01"
+  },
+  {
+    "slug": "cafe-rush",
+    "title": "Café Rush: Bar Mode",
+    "description": "Assemble hot and iced café drinks quickly while the ticket rail keeps rolling.",
+    "tags": ["training", "speed"],
+    "entryPath": "./apps/cafe-rush/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2025-04-01"
   }
 ]
