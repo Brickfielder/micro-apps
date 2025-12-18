@@ -1,110 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outlook Simulation Task</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email Management Assessment</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <div id="modal-intro" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Email Management Assessment</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>Objective:</strong> Process all 20 inbox items as efficiently as possible while adhering to corporate communication protocols.</p>
+                <ul class="instruction-list">
+                    <li><strong>Reply</strong> to direct requests, tasks, and scheduling items.</li>
+                    <li><strong>Archive</strong> notifications, receipts, and reference material that require no action.</li>
+                    <li><strong>Delete</strong> spam, promotional newsletters, and phishing attempts.</li>
+                </ul>
+                <p class="modal-note">
+                    <span>⚠️ <strong>Note:</strong> Be vigilant for security threats (phishing) and internal policy violations.</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="primary-btn" onclick="startGame()">Begin Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-report" class="modal-overlay hidden">
+        <div class="modal-card report-card">
+            <div class="modal-header">
+                <h2>Assessment Results</h2>
+            </div>
+            <div class="modal-body modal-body--flush">
+                <div class="score-row">
+                    <div>
+                        <div class="score-label">ACCURACY</div>
+                        <div class="score-value score-primary" id="score-accuracy">0%</div>
+                    </div>
+                    <div>
+                        <div class="score-label">TOTAL TIME</div>
+                        <div class="score-value" id="score-time">0:00</div>
+                    </div>
+                    <div>
+                        <div class="score-label">AVG SPEED</div>
+                        <div class="score-value" id="score-speed">0s</div>
+                    </div>
+                </div>
+                <div class="report-table-wrap">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Action Taken</th>
+                                <th>Protocol</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="primary-btn" onclick="location.reload()">Restart Module</button>
+            </div>
+        </div>
+    </div>
 
     <div class="app-header">
-        <span style="margin-right: 15px;">:::</span>
-        <span>Outlook Simulation</span>
-        <span style="flex:1;"></span>
-        <span id="timer" style="font-weight: normal; font-size: 14px;">00:00</span>
+        <div class="logo">
+            <span>Inbox Simulation</span>
+        </div>
+        <div class="timer-box" id="timer">00:00</div>
     </div>
 
-    <div class="main-container">
+    <div class="main-stage">
         <div class="folder-pane">
-            <div class="folder-item active">Inbox <span id="count-display" style="float:right; font-weight:bold; color:var(--outlook-blue)">20</span></div>
-            <div class="folder-item">Sent Items</div>
-            <div class="folder-item">Drafts</div>
-            <div class="folder-item">Archive</div>
-            <div class="folder-item">Deleted Items</div>
-        </div>
-
-        <div class="email-list-pane" id="email-list">
+            <div class="folder-header">
+                <span>Inbox</span>
+                <span class="count" id="count-display">20</span>
             </div>
+            <div id="email-list"></div>
+        </div>
 
         <div class="reading-pane">
-            <div class="toolbar">
-                <button class="tool-btn btn-delete" onclick="handleAction('delete')">
-                    🗑️ Delete
+            <div class="ribbon-bar" id="ribbon">
+                <button class="ribbon-btn btn-reply" onclick="handleAction('action')">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M6.5 3.5v-2l-5 4.5 5 4.5v-2c3.5 0 6 2 6 5.5-1-2.5-3-4.5-6-4.5z" stroke="none" /></svg>
+                    Reply
                 </button>
-                <button class="tool-btn btn-archive" onclick="handleAction('archive')">
-                    📂 Archive
+                <div class="ribbon-divider"></div>
+                <button class="ribbon-btn btn-archive" onclick="handleAction('archive')">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M14 2v2H2V2h12zm-1 3v9H3V5h10zM6 8h4v1H6V8z" fill-rule="evenodd" /></svg>
+                    Archive
                 </button>
-                <button class="tool-btn btn-action" onclick="handleAction('action')">
-                    ⚡ Reply / Action
+                <button class="ribbon-btn btn-delete" onclick="handleAction('delete')">
+                    <svg width="16" height="16" viewBox="0 0 16 16"><path d="M10 2L9 1H7l-1 1H2v1h12V2h-4zM3 14c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V4H3v10z" fill-rule="evenodd" /></svg>
+                    Delete
                 </button>
-                <span style="flex:1;"></span>
-                <span style="font-size:12px; color:var(--text-meta);">Assessment Mode</span>
             </div>
 
-            <div class="email-content" id="email-view">
+            <div id="email-display" class="email-scroll-area">
                 <div class="message-header">
-                    <div class="msg-subject" id="disp-subject"></div>
-                    <div class="msg-from" id="disp-from"></div>
-                    <div class="msg-to">To: You</div>
+                    <div class="message-subject" id="disp-subject"></div>
+                    <div class="sender-block">
+                        <div class="avatar" id="disp-avatar"></div>
+                        <div class="sender-details">
+                            <strong id="disp-from"></strong>
+                            <span id="disp-time"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="msg-body" id="disp-body"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-intro" class="overlay-screen">
-        <div class="card">
-            <h1 style="color:var(--outlook-blue); margin-top:0;">Outlook Simulation</h1>
-            <p><strong>Scenario:</strong> You have returned to work after a week off. Your inbox has 20 unread items.</p>
-            <p><strong>Your Task:</strong> Clear the inbox completely by processing one email at a time.</p>
-            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            <p>For each email, choose the BEST action:</p>
-            <ul style="line-height:1.6;">
-                <li>🗑️ <strong>DELETE:</strong> Spam, Junk, or irrelevant notifications.</li>
-                <li>📂 <strong>ARCHIVE:</strong> Information to keep (Receipts, FYIs, "Closed" notices). No response needed.</li>
-                <li>⚡ <strong>REPLY / ACTION:</strong> Requires you to do something, reply, or is marked Urgent.</li>
-            </ul>
-            <div style="text-align:center;">
-                <button class="btn-primary" onclick="startGame()">Start Assessment</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-report" class="overlay-screen hidden">
-        <div class="card" style="max-width:800px; max-height: 90vh; overflow-y:auto;">
-            <h2 style="margin-top:0;">Assessment Complete</h2>
-            <div style="display:flex; justify-content:space-around; margin-bottom:20px; background:#f9f9f9; padding:15px; border-radius:4px;">
-                <div>
-                    <div style="font-size:12px; color:gray;">ACCURACY</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-accuracy">0%</div>
-                </div>
-                <div>
-                    <div style="font-size:12px; color:gray;">TOTAL TIME</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-time">00:00</div>
-                </div>
-                <div>
-                    <div style="font-size:12px; color:gray;">AVG SPEED</div>
-                    <div style="font-size:24px; font-weight:bold;" id="score-speed">0s</div>
-                </div>
+                <div class="message-body" id="disp-body"></div>
             </div>
 
-            <table class="report-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Category</th>
-                        <th>Your Action</th>
-                        <th>Correct Action</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody id="report-body">
-                    </tbody>
-            </table>
-
-            <div style="text-align:center;">
-                <button class="btn-primary" onclick="location.reload()">Restart</button>
+            <div id="empty-state" class="empty-state hidden">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-2-2H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z" /></svg>
+                <h3>All caught up</h3>
+                <p>You have processed all items in your inbox.</p>
             </div>
         </div>
     </div>
