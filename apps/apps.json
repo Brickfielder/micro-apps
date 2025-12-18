@@ -68,5 +68,15 @@
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2025-02-01"
+  },
+  {
+    "slug": "metro-nav",
+    "title": "Metro Nav",
+    "description": "Plan a multi-leg city journey while balancing time, budget, and memory of the route.",
+    "tags": ["navigation", "memory"],
+    "entryPath": "./apps/metro-nav/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2025-03-01"
   }
 ]
