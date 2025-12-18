@@ -1,6 +1,6 @@
 const BRAND_HOME = './index.html';
 
-export function mountShell({ appTitle, appTagline = '', navLinks = [] }) {
+export function mountShell({ appTitle, appTagline = '', navLinks = [], includeHomeLink = true }) {
   const root = document.getElementById('app-root') || document.body;
   root.innerHTML = '';
 
@@ -37,7 +37,11 @@ export function mountShell({ appTitle, appTagline = '', navLinks = [] }) {
   const nav = document.createElement('nav');
   nav.className = 'nav-links';
   const hasHome = navLinks.some((link) => link.href === BRAND_HOME || link.label === 'Home');
-  const links = hasHome ? navLinks : [{ href: BRAND_HOME, label: 'Home', current: navLinks.length === 0 }, ...navLinks];
+  const links = includeHomeLink
+    ? hasHome
+      ? navLinks
+      : [{ href: BRAND_HOME, label: 'Home', current: navLinks.length === 0 }, ...navLinks]
+    : navLinks;
 
   links.forEach((link) => {
     const a = document.createElement('a');
