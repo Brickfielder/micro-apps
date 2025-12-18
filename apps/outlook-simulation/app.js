@@ -45,6 +45,15 @@ let startTime = 0;
 let emailStartTime = 0;
 let timerInt;
 
+function showStage(id) {
+    ['screen-intro', 'stage-task', 'screen-report'].forEach((stageId) => {
+        const el = document.getElementById(stageId);
+        if (el) el.classList.remove('active');
+    });
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+}
+
 // --- ELEMENTS ---
 const uiList = document.getElementById('email-list');
 const uiSubject = document.getElementById('disp-subject');
@@ -56,7 +65,7 @@ const uiTimer = document.getElementById('timer');
 // --- LOGIC ---
 
 function startGame() {
-    document.getElementById('screen-intro').classList.add('hidden');
+    showStage('stage-task');
     startTime = Date.now();
     emailStartTime = Date.now();
     timerInt = setInterval(updateTimer, 1000);
@@ -141,7 +150,7 @@ function handleAction(userAction) {
 
 function endGame() {
     clearInterval(timerInt);
-    document.getElementById('screen-report').classList.remove('hidden');
+    showStage('screen-report');
 
     // CALC STATS
     const totalCorrect = results.filter(r => r.isCorrect).length;
