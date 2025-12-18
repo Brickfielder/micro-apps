@@ -31,6 +31,7 @@ let startTime = 0;
 let emailStartTime = 0;
 let timerInt;
 
+const uiIntro = document.getElementById('modal-intro');
 const uiList = document.getElementById('email-list');
 const uiSubject = document.getElementById('disp-subject');
 const uiFrom = document.getElementById('disp-from');
@@ -44,7 +45,7 @@ const uiEmpty = document.getElementById('empty-state');
 const uiRibbon = document.getElementById('ribbon');
 
 function startGame() {
-    document.getElementById('modal-intro').classList.add('hidden');
+    if (uiIntro) uiIntro.classList.add('hidden');
     startTime = Date.now();
     emailStartTime = Date.now();
     processedIndices = new Set();
