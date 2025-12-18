@@ -1,15 +1,114 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Outlook Simulation — Inbox Triage Practice</title>
-  <meta name="description" content="Triage 20 messages in an Outlook-style inbox and measure your decisions." />
-  <link rel="stylesheet" href="../../shared/shell/shell.css" />
-  <link rel="stylesheet" href="./styles.css" />
-  <script type="module" src="./app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlook Simulation Task</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="app-root"></main>
+
+    <div class="app-header">
+        <span style="margin-right: 15px;">:::</span>
+        <span>Outlook Simulation</span>
+        <span style="flex:1;"></span>
+        <span id="timer" style="font-weight: normal; font-size: 14px;">00:00</span>
+    </div>
+
+    <div class="main-container">
+        <div class="folder-pane">
+            <div class="folder-item active">Inbox <span id="count-display" style="float:right; font-weight:bold; color:var(--outlook-blue)">20</span></div>
+            <div class="folder-item">Sent Items</div>
+            <div class="folder-item">Drafts</div>
+            <div class="folder-item">Archive</div>
+            <div class="folder-item">Deleted Items</div>
+        </div>
+
+        <div class="email-list-pane" id="email-list">
+            </div>
+
+        <div class="reading-pane">
+            <div class="toolbar">
+                <button class="tool-btn btn-delete" onclick="handleAction('delete')">
+                    🗑️ Delete
+                </button>
+                <button class="tool-btn btn-archive" onclick="handleAction('archive')">
+                    📂 Archive
+                </button>
+                <button class="tool-btn btn-action" onclick="handleAction('action')">
+                    ⚡ Reply / Action
+                </button>
+                <span style="flex:1;"></span>
+                <span style="font-size:12px; color:var(--text-meta);">Assessment Mode</span>
+            </div>
+
+            <div class="email-content" id="email-view">
+                <div class="message-header">
+                    <div class="msg-subject" id="disp-subject"></div>
+                    <div class="msg-from" id="disp-from"></div>
+                    <div class="msg-to">To: You</div>
+                </div>
+                <div class="msg-body" id="disp-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-intro" class="overlay-screen">
+        <div class="card">
+            <h1 style="color:var(--outlook-blue); margin-top:0;">Outlook Simulation</h1>
+            <p><strong>Scenario:</strong> You have returned to work after a week off. Your inbox has 20 unread items.</p>
+            <p><strong>Your Task:</strong> Clear the inbox completely by processing one email at a time.</p>
+            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+            <p>For each email, choose the BEST action:</p>
+            <ul style="line-height:1.6;">
+                <li>🗑️ <strong>DELETE:</strong> Spam, Junk, or irrelevant notifications.</li>
+                <li>📂 <strong>ARCHIVE:</strong> Information to keep (Receipts, FYIs, "Closed" notices). No response needed.</li>
+                <li>⚡ <strong>REPLY / ACTION:</strong> Requires you to do something, reply, or is marked Urgent.</li>
+            </ul>
+            <div style="text-align:center;">
+                <button class="btn-primary" onclick="startGame()">Start Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-report" class="overlay-screen hidden">
+        <div class="card" style="max-width:800px; max-height: 90vh; overflow-y:auto;">
+            <h2 style="margin-top:0;">Assessment Complete</h2>
+            <div style="display:flex; justify-content:space-around; margin-bottom:20px; background:#f9f9f9; padding:15px; border-radius:4px;">
+                <div>
+                    <div style="font-size:12px; color:gray;">ACCURACY</div>
+                    <div style="font-size:24px; font-weight:bold;" id="score-accuracy">0%</div>
+                </div>
+                <div>
+                    <div style="font-size:12px; color:gray;">TOTAL TIME</div>
+                    <div style="font-size:24px; font-weight:bold;" id="score-time">00:00</div>
+                </div>
+                <div>
+                    <div style="font-size:12px; color:gray;">AVG SPEED</div>
+                    <div style="font-size:24px; font-weight:bold;" id="score-speed">0s</div>
+                </div>
+            </div>
+
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category</th>
+                        <th>Your Action</th>
+                        <th>Correct Action</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="report-body">
+                    </tbody>
+            </table>
+
+            <div style="text-align:center;">
+                <button class="btn-primary" onclick="location.reload()">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
