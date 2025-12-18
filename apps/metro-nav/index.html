@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Nav: Master Class</title>
+    <style>
+        :root {
+            --brand: #0f172a;
+            --bg: #f1f5f9;
+            --panel: #ffffff;
+            --text: #334155;
+            --danger: #ef4444;
+            --success: #10b981;
+            --road: #94a3b8;
+            --blue: #2563eb;
+        }
+
+        body {
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background: var(--brand);
+            color: white;
+            padding: 12px 25px;
+            font-weight: 800; font-size: 20px; letter-spacing: -0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 20;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* LAYOUT */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* COL 1: SIDEBAR (Stats & Memo) */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+            z-index: 15;
+        }
+
+        .stat-group { display: flex; flex-direction: column; gap: 5px; }
+        .stat-label { font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 1px; }
+        .stat-val { font-size: 36px; font-weight: 900; font-family: monospace; color: var(--brand); line-height: 1; }
+        .stat-val.money { color: var(--success); }
+        .stat-val.low { color: var(--danger); }
+        
+        .stat-val.target { font-size: 24px; color: #64748b; }
+
+        .memo-pad {
+            background: #fffbeb; border: 1px solid #fcd34d; 
+            padding: 15px; border-radius: 2px; 
+            font-family: 'Courier New', Courier, monospace; font-size: 13px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .memo-pad::before {
+            content: '📌 TASK LIST'; 
+            position: absolute; top: -10px; left: 10px; 
+            background: #fcd34d; color: #78350f; 
+            padding: 2px 6px; font-weight: bold; font-size: 10px;
+        }
+        .memo-item { margin-bottom: 8px; display: flex; gap: 8px; }
+        .check-box { width: 12px; height: 12px; border: 1px solid #78350f; display: inline-block; }
+
+        /* COL 2: MAP */
+        .map-panel {
+            flex: 1;
+            background: #f8fafc;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mission-header {
+            background: white; padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .mission-label { font-size: 12px; font-weight: 800; color: #64748b; text-transform: uppercase; }
+        .mission-target { font-size: 18px; font-weight: 800; color: var(--brand); }
+
+        /* SVG MAP */
+        .map-road { stroke: var(--road); stroke-width: 8; fill: none; stroke-linecap: round; }
+        .map-walk { stroke: #94a3b8; stroke-width: 3; fill: none; stroke-dasharray: 6, 6; }
+        
+        .node-circle { fill: white; stroke: var(--road); stroke-width: 4; }
+        .node-label { font-size: 11px; font-weight: bold; fill: #64748b; text-anchor: middle; font-family: sans-serif; text-transform: uppercase; }
+        .path-label { font-size: 10px; fill: #64748b; text-anchor: middle; font-style: italic; background: white;}
+
+        /* COL 3: CONTROLS */
+        .control-panel {
+            width: 340px;
+            background: white;
+            border-left: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 15;
+        }
+
+        .option-card {
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 16px; margin-bottom: 12px;
+            cursor: pointer; transition: all 0.1s;
+            background: #f8fafc;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .option-card:hover { border-color: var(--blue); background: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .option-card:active { background: #eff6ff; }
+        
+        .opt-top { display: flex; justify-content: space-between; align-items: center; }
+        .opt-title { font-weight: 800; font-size: 15px; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+        .opt-price { font-weight: 700; color: #1e293b; background: #e2e8f0; padding: 3px 8px; border-radius: 4px; font-size: 14px; }
+        .opt-dest { font-size: 13px; color: #475569; font-weight: 600; }
+        .opt-meta { font-size: 12px; color: #64748b; display: flex; gap: 15px; margin-top: 5px; }
+
+        /* MODALS */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95); z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .modal { background: white; padding: 40px; border-radius: 12px; max-width: 550px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .btn { background: var(--blue); color: white; border: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; width: 100%; transition: background 0.2s; margin-top: 10px; }
+        .btn:hover { background: #1e293b; }
+        .btn-outline { background: transparent; border: 2px solid #cbd5e1; color: #475569; margin-top: 10px;}
+        .btn-outline:hover { border-color: #475569; color: #1e293b; background: #f1f5f9; }
+        .hidden { display: none !important; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>🚇 METRO NAV</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="sidebar">
+            <div class="stat-group">
+                <span class="stat-label">Current Time</span>
+                <span class="stat-val" id="ui-time">09:00</span>
+            </div>
+            <div class="stat-group">
+                <span class="stat-label">Deadline</span>
+                <span class="stat-val target" id="ui-deadline">11:00</span>
+            </div>
+            <div class="stat-group">
+                <span class="stat-label">Budget</span>
+                <span class="stat-val money" id="ui-cash">£12.00</span>
+            </div>
+            
+            <div class="memo-pad">
+                <div style="margin-bottom:10px; font-weight:bold; border-bottom:1px dashed #78350f; padding-bottom:5px;">ITINERARY:</div>
+                <div class="memo-item"><span class="check-box"></span> 1. West End (Pickup)</div>
+                <div class="memo-item"><span class="check-box"></span> 2. Post Office (Drop)</div>
+                <div class="memo-item"><span class="check-box"></span> 3. Medical Park</div>
+                <div style="margin-top:15px; font-style:italic; font-size:11px; line-height:1.4;">
+                    "Remember: If direct bus is missing, check the map for nearby stops."
+                </div>
+            </div>
+        </div>
+
+        <div class="map-panel">
+            <div class="mission-header">
+                <span class="mission-label">FINAL DESTINATION:</span>
+                <span class="mission-target">MEDICAL PARK</span>
+            </div>
+
+            <svg width="100%" height="100%" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+                
+                <path d="M 300 250 L 150 250" class="map-walk"></path>
+                <text x="225" y="240" class="path-label">via Footpath</text>
+
+                <path d="M 150 250 Q 300 350 450 250" class="map-walk"></path>
+                <text x="300" y="320" class="path-label">via Footpath</text>
+                
+                <path d="M 450 250 Q 420 325 450 400" class="map-walk"></path>
+                <text x="420" y="340" class="path-label">via Footpath</text>
+
+                <line x1="150" y1="250" x2="550" y2="250" class="map-road"></line>
+                <line x1="300" y1="100" x2="300" y2="250" class="map-road"></line>
+                <line x1="450" y1="100" x2="450" y2="550" class="map-road"></line>
+
+                <circle cx="150" cy="250" r="10" class="node-circle"></circle>
+                <text x="150" y="280" class="node-label">WEST END</text>
+
+                <circle cx="300" cy="100" r="10" class="node-circle"></circle>
+                <text x="300" y="80" class="node-label">CITY ZOO</text>
+
+                <circle cx="300" cy="250" r="12" class="node-circle"></circle>
+                <text x="300" y="285" class="node-label">HOME</text>
+
+                <circle cx="450" cy="100" r="10" class="node-circle"></circle>
+                <text x="450" y="80" class="node-label">CENTRAL STN</text>
+
+                <circle cx="450" cy="250" r="12" class="node-circle"></circle>
+                <text x="450" y="225" class="node-label">HIGH ST (PO)</text>
+
+                <circle cx="550" cy="250" r="10" class="node-circle"></circle>
+                <text x="550" y="280" class="node-label">OLD TOWN</text>
+
+                <circle cx="450" cy="400" r="12" class="node-circle"></circle>
+                <text x="490" y="410" class="node-label" style="text-anchor:start">MEDICAL PARK</text>
+
+                <circle cx="450" cy="550" r="10" class="node-circle"></circle>
+                <text x="450" y="580" class="node-label">CITY AIRPORT</text>
+
+                <g id="user-pin" transform="translate(300, 250)">
+                    <circle cx="0" cy="0" r="9" fill="#ef4444" stroke="white" stroke-width="2" style="filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));"></circle>
+                    <text x="0" y="-18" style="font-size:11px; font-weight:800; fill:#ef4444; text-anchor:middle;">YOU</text>
+                </g>
+            </svg>
+        </div>
+
+        <div class="control-panel">
+            <h4 style="margin-top:0; color:#94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">Departures</h4>
+            <div id="options-list"></div>
+        </div>
+    </div>
+
+    <div id="modal-start" class="overlay">
+        <div class="modal">
+            <h1>🚦 Cognitive Navigation</h1>
+            <div style="text-align:left; background:#f1f5f9; padding:25px; border-radius:8px; margin:20px 0; font-size:15px; line-height:1.6;">
+                <p><strong>Your Mission:</strong></p>
+                <ol>
+                    <li>Start at <strong>Home</strong>.</li>
+                    <li>Go to <strong>West End</strong> (Pick up item).</li>
+                    <li>Go to <strong>Post Office</strong> (Mail item).</li>
+                    <li>Finish at <strong>Medical Park</strong>.</li>
+                </ol>
+                <p><strong>Constraints:</strong></p>
+                <ul>
+                    <li>Arrive before <strong>11:00</strong>.</li>
+                    <li>Keep budget positive.</li>
+                </ul>
+                <p><strong>Warning:</strong> The screen will NOT tell you the next step. You must remember the order.</p>
+            </div>
+            <button class="btn" onclick="startGame()">Start Simulation</button>
+        </div>
+    </div>
+
+    <div id="modal-poor" class="overlay hidden">
+        <div class="modal" style="border-top: 5px solid #f59e0b;">
+            <h2>Payment Declined</h2>
+            <p>You cannot afford this ticket.</p>
+            <p style="color:#64748b">Penalty: 5 mins lost.</p>
+            <button class="btn" style="background:#f59e0b; color:black" onclick="closePoor()">Back</button>
+        </div>
+    </div>
+
+    <div id="modal-end" class="overlay hidden">
+        <div class="modal">
+            <h2>Journey Report</h2>
+            <div style="text-align:left; background:#f8fafc; padding:20px; border-radius:8px; margin:20px 0;">
+                <div class="stat-row">Result: <strong id="res-status">...</strong></div>
+                <div class="stat-row">Final Loc: <strong id="res-loc">...</strong></div>
+                <div class="stat-row">Time: <strong id="res-time">...</strong></div>
+                <div class="stat-row">Funds: <strong id="res-cash">...</strong></div>
+            </div>
+            <button class="btn" onclick="location.reload()">Restart</button>
+            <button class="btn btn-outline" onclick="downloadReport()">⬇ Download Stats</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG
+        const START_TIME = 9 * 60; 
+        const DEADLINE = 11 * 60; // 11:00
+        const START_BUDGET = 15.00;
+
+        // COORDS
+        const COORDS = {
+            'HOME': [300, 250], 'ZOO': [300, 100], 'WEST': [150, 250],
+            'PO': [450, 250], 'CENTRAL': [450, 100], 'OLDTOWN': [550, 250],
+            'HOSP': [450, 400], 'AIRPORT': [450, 550]
+        };
+
+        // STATE
+        let time = START_TIME;
+        let budget = START_BUDGET;
+        let leg = 1; 
+
+        // DOM
+        const uiTime = document.getElementById('ui-time');
+        const uiCash = document.getElementById('ui-cash');
+        const uiList = document.getElementById('options-list');
+        const userPin = document.getElementById('user-pin');
+
+        function startGame() {
+            document.getElementById('modal-start').classList.add('hidden');
+            setupLeg(1);
+        }
+
+        function formatTime(m) {
+            let h = Math.floor(m / 60);
+            let mm = m % 60;
+            return `${h.toString().padStart(2,'0')}:${mm.toString().padStart(2,'0')}`;
+        }
+
+        function updateHUD() {
+            uiTime.innerText = formatTime(time);
+            uiCash.innerText = `£${budget.toFixed(2)}`;
+            if(budget < 4) uiCash.classList.add('low');
+        }
+
+        function movePin(locName) {
+            const [x, y] = COORDS[locName];
+            userPin.setAttribute('transform', `translate(${x}, ${y})`);
+        }
+
+        function setupLeg(num) {
+            leg = num;
+            updateHUD();
+            uiList.innerHTML = '';
+
+            // LEG 1: HOME -> WEST END (Common Error: Going straight to PO)
+            if(leg === 1) {
+                movePin('HOME');
+                const opts = [
+                    { name: "Bus 99", dest: "West End", cost: 2.00, time: 20, wait: 5, loc: 'WEST', type: 'bus' },
+                    { name: "Bus 55", dest: "High St / PO", cost: 2.00, time: 35, wait: 8, loc: 'PO', type: 'bus' }, // Skipped step
+                    { name: "Metro Blue", dest: "Old Town", cost: 3.50, time: 25, wait: 2, loc: 'OLDTOWN', type: 'tram' }, // Wrong way
+                    { name: "Taxi", dest: "West End", cost: 14.00, time: 10, wait: 2, loc: 'WEST', type: 'taxi' }, // Budget killer
+                    { name: "Bus 10A", dest: "City Zoo", cost: 2.00, time: 20, wait: 6, loc: 'ZOO', type: 'bus' },
+                    { name: "Walk", dest: "via Footpath", cost: 0.00, time: 30, wait: 0, loc: 'WEST', type: 'walk' }
+                ];
+                renderOpts(opts);
+            } 
+            // LEG 2: WEST END -> POST OFFICE
+            else if(leg === 2) {
+                movePin('WEST'); 
+                const opts = [
+                    { name: "Bus 99 (Return)", dest: "Home / Zoo", cost: 2.00, time: 20, wait: 5, loc: 'HOME', type: 'bus' },
+                    { name: "Bus 55", dest: "High St / PO", cost: 2.00, time: 25, wait: 10, loc: 'PO', type: 'bus' },
+                    { name: "Bus 202", dest: "City Airport", cost: 3.50, time: 40, wait: 5, loc: 'AIRPORT', type: 'bus' }, // Tempting, skips PO
+                    { name: "Tram Link", dest: "Central Stn", cost: 3.00, time: 40, wait: 5, loc: 'CENTRAL', type: 'tram' },
+                    { name: "Taxi", dest: "High St Direct", cost: 8.00, time: 15, wait: 2, loc: 'PO', type: 'taxi' },
+                    { name: "Walk", dest: "via Footpath", cost: 0.00, time: 60, wait: 0, loc: 'PO', type: 'walk' } 
+                ];
+                renderOpts(opts);
+            }
+            // LEG 3: POST OFFICE -> HOSPITAL
+            else if(leg === 3) {
+                movePin('PO');
+                const opts = [
+                    { name: "Bus 101", dest: "Central Stn", cost: 2.50, time: 20, wait: 5, loc: 'CENTRAL', type: 'bus' },
+                    { name: "Bus 88", dest: "Medical Park", cost: 2.50, time: 15, wait: 35, loc: 'HOSP', type: 'bus' }, // TIME TRAP: Wait is too long!
+                    { name: "Tram Line", dest: "Old Town", cost: 3.00, time: 15, wait: 4, loc: 'OLDTOWN', type: 'tram' },
+                    // THE TRICK: Airport Bus passes Hospital
+                    { name: "Bus 700", dest: "City Airport", cost: 2.50, time: 30, wait: 12, loc: 'HOSP', type: 'bus' }, 
+                    { name: "Walk", dest: "via Footpath", cost: 0.00, time: 45, wait: 0, loc: 'HOSP', type: 'walk' },
+                    { name: "Uber", dest: "Medical Park", cost: 8.00, time: 15, wait: 3, loc: 'HOSP', type: 'taxi' }
+                ];
+                renderOpts(opts);
+            }
+        }
+
+        function renderOpts(opts) {
+            opts.forEach(o => {
+                const div = document.createElement('div');
+                div.className = 'option-card';
+                div.onclick = () => handleChoice(o);
+                
+                let icon = '🚌';
+                if(o.type === 'walk') icon = '🚶';
+                if(o.type === 'taxi') icon = '🚕';
+                if(o.type === 'tram') icon = '🚋';
+
+                div.innerHTML = `
+                    <div class="opt-top">
+                        <span class="opt-title">${icon} ${o.name}</span>
+                        <span class="opt-price">£${o.cost.toFixed(2)}</span>
+                    </div>
+                    <span class="opt-dest">to ${o.dest}</span>
+                    <div class="opt-meta">
+                        <span>⏳ ${o.time} min</span>
+                        <span>WAIT: ${o.wait} min</span>
+                    </div>
+                `;
+                uiList.appendChild(div);
+            });
+        }
+
+        function handleChoice(opt) {
+            // MONEY CHECK
+            if(opt.cost > budget) {
+                time += 5;
+                updateHUD();
+                document.getElementById('modal-poor').classList.remove('hidden');
+                return;
+            }
+
+            // EXECUTE
+            budget -= opt.cost;
+            time += opt.time + opt.wait;
+            movePin(opt.loc);
+            updateHUD();
+
+            // LOGIC
+            if(leg === 1) {
+                if(opt.loc === 'WEST') {
+                    time += 10; // Pickup time
+                    setupLeg(2);
+                } else {
+                    endGame(false, opt.loc + " (Wrong Stop)");
+                }
+            }
+            else if(leg === 2) {
+                if(opt.loc === 'PO') {
+                    time += 10; // Dropoff time
+                    setupLeg(3);
+                } else {
+                    endGame(false, opt.loc + " (Wrong Stop)");
+                }
+            }
+            else if(leg === 3) {
+                if(opt.loc === 'HOSP') {
+                    endGame(true, "Medical Park");
+                } else if(opt.loc === 'AIRPORT') {
+                    endGame(false, "City Airport (Missed Stop)");
+                } else {
+                    endGame(false, opt.loc);
+                }
+            }
+        }
+
+        function closePoor() {
+            document.getElementById('modal-poor').classList.add('hidden');
+        }
+
+        function endGame(success, loc) {
+            document.getElementById('modal-end').classList.remove('hidden');
+            const stat = document.getElementById('res-status');
+            
+            document.getElementById('res-loc').innerText = loc;
+            document.getElementById('res-time').innerText = formatTime(time);
+            document.getElementById('res-cash').innerText = `£${budget.toFixed(2)}`;
+
+            if(success && time <= DEADLINE) {
+                stat.innerText = "SUCCESS"; stat.style.color = "green";
+            } else if (success) {
+                stat.innerText = "LATE"; stat.style.color = "orange";
+            } else {
+                stat.innerText = "FAILED"; stat.style.color = "red";
+            }
+        }
+
+        function downloadReport() {
+            const status = document.getElementById('res-status').innerText;
+            const loc = document.getElementById('res-loc').innerText;
+            const timeStr = document.getElementById('res-time').innerText;
+            const cash = document.getElementById('res-cash').innerText;
+
+            const fileContent = `METRO NAV MISSION REPORT\n-----------------------\nStatus: ${status}\nFinal Location: ${loc}\nArrival Time: ${timeStr}\nBudget Remaining: ${cash}\n\nGenerated by Metro Nav App`;
+            
+            const element = document.createElement('a');
+            const file = new Blob([fileContent], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = "mission_report.txt";
+            document.body.appendChild(element); // Required for this to work in FireFox
+            element.click();
+            document.body.removeChild(element);
+        }
+
+    </script>
+</body>
+</html>
