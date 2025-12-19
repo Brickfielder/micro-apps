@@ -679,9 +679,8 @@
 
     function renderFeatured(apps) {
       featuredGrid.replaceChildren();
-      const featuredApps = apps.filter((app) => app.featured);
-      featuredSection.style.display = featuredApps.length ? 'block' : 'none';
-      featuredApps.slice(0, 4).forEach((app) => featuredGrid.appendChild(createCard(app)));
+      featuredSection.style.display = apps.length ? 'block' : 'none';
+      apps.forEach((app) => featuredGrid.appendChild(createCard(app)));
     }
 
     function renderApps(apps) {
@@ -710,10 +709,13 @@
       });
 
       const sorted = [...filtered].sort(sorters[sortKey] || sorters.featured);
+      const featuredApps = sorted.filter((app) => app.featured).slice(0, 4);
+      const featuredSlugs = new Set(featuredApps.map((app) => app.slug));
+      const mainApps = sorted.filter((app) => !featuredSlugs.has(app.slug));
 
       resultCount.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} shown`;
-      renderFeatured(sorted);
-      renderApps(sorted);
+      renderFeatured(featuredApps);
+      renderApps(mainApps);
       updateActiveFilter();
     }
 
