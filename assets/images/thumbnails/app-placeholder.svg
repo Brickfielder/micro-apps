@@ -1,0 +1,17 @@
+<svg width="640" height="360" viewBox="0 0 640 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#EEF2FF" />
+      <stop offset="50%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#DCFCE7" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" rx="24" fill="url(#grad)" />
+  <rect x="48" y="72" width="544" height="216" rx="20" fill="white" stroke="#E5E7EB" stroke-width="4" />
+  <rect x="80" y="104" width="240" height="24" rx="12" fill="#EEF2FF" />
+  <rect x="80" y="144" width="160" height="16" rx="8" fill="#E0F2FE" />
+  <rect x="80" y="176" width="200" height="16" rx="8" fill="#E0F2FE" />
+  <rect x="80" y="220" width="140" height="44" rx="12" fill="#A5B4FC" />
+  <circle cx="480" cy="182" r="64" fill="#C7D2FE" />
+  <text x="480" y="190" text-anchor="middle" fill="#4338CA" font-size="24" font-family="Inter, Arial, sans-serif" font-weight="700">Preview</text>
+</svg>
