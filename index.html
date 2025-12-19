@@ -4,215 +4,441 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Micro Apps | Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="./shared/shell/shell.css" />
   <style>
     :root {
-      --home-bg: #f7f8fc;
-      --home-card: #ffffff;
-      --home-border: #e5e7eb;
-      --home-text: #111827;
-      --home-muted: #6b7280;
-      --home-accent: #7c3aed;
-      --home-pill: #f3f4f6;
-      --home-radius: 20px;
-      --home-shadow: 0 15px 40px rgba(17, 24, 39, 0.08);
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --accent: #6366f1;
+      --accent-strong: #4f46e5;
+      --pill: #eef2ff;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max-width: 1200px;
+      --grid-gap: 1.25rem;
+      --transition: 160ms ease;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
 
-    body {
-      background: var(--home-bg);
-      color: var(--home-text);
+    * {
+      box-sizing: border-box;
     }
 
-    .app-frame {
-      max-width: 1200px;
-      padding: 48px 24px 64px;
+    body.home-theme {
+      margin: 0;
+      background: radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.05), transparent 28%),
+        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08), transparent 25%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
     }
 
-    header.app-header {
-      background: linear-gradient(120deg, rgba(124, 58, 237, 0.08), rgba(59, 130, 246, 0.05));
-      color: var(--home-text);
-      border: 1px solid var(--home-border);
-      box-shadow: 0 10px 30px rgba(148, 163, 184, 0.18);
+    body.home-theme .app-frame {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 32px 20px 64px;
     }
 
-    .app-logo {
-      background: rgba(124, 58, 237, 0.12);
-      color: #6d28d9;
-      border-color: rgba(124, 58, 237, 0.35);
+    body.home-theme header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(229, 231, 235, 0.8);
+      box-shadow: 0 16px 60px rgba(15, 23, 42, 0.08);
+      border-radius: 20px;
+      padding: 20px 18px;
+      backdrop-filter: blur(12px);
     }
 
-    .app-meta p {
-      color: var(--home-muted);
+    body.home-theme .app-brand {
+      gap: 14px;
     }
 
-    .nav-links a,
-    .nav-links a[aria-current='page'] {
-      background: #fff;
-      border-color: var(--home-border);
-      color: var(--home-text);
+    body.home-theme .app-logo {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(14, 165, 233, 0.16));
+      color: var(--accent-strong);
+      border-color: rgba(99, 102, 241, 0.35);
+      font-weight: 700;
     }
 
-    .main-content {
+    body.home-theme .app-meta h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+
+    body.home-theme .app-meta p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    body.home-theme .nav-links {
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    body.home-theme .nav-links a,
+    body.home-theme .nav-links a[aria-current='page'] {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      font-weight: 600;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+
+    body.home-theme .nav-links a:hover {
+      background: #eef2ff;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.16);
+    }
+
+    body.home-theme .main-content {
+      display: flex;
+      flex-direction: column;
       gap: 1.5rem;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(14, 165, 233, 0.12));
+      border: 1px solid rgba(99, 102, 241, 0.16);
+      border-radius: 28px;
+      padding: 32px 28px;
+      box-shadow: 0 18px 50px rgba(79, 70, 229, 0.12);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .hero h2 {
+      font-size: 2rem;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fff;
+      border: none;
+      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 1.25rem;
+    }
+
+    .stat-chip {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: var(--text);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .controls-panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .controls-row {
       display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
       flex-wrap: wrap;
+      gap: 12px;
       align-items: center;
     }
 
     .search-input {
       flex: 1;
-      padding: 0.9rem 1rem;
       min-width: 240px;
-      border: 1px solid var(--home-border);
+      padding: 12px 14px;
       border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
       font-size: 1rem;
-      background: #fff;
-      color: var(--home-text);
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+      color: var(--text);
     }
 
-    .muted {
-      color: var(--home-muted);
+    .select-input {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-chip {
+      border-radius: 999px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+
+    .filter-chip.active {
+      background: var(--pill);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: var(--accent-strong);
+      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.14);
+    }
+
+    .results-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-weight: 600;
     }
 
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--grid-gap);
       width: 100%;
     }
 
-    .card.app-card {
+    .app-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      background: var(--home-card);
-      border: 1px solid var(--home-border);
-      border-radius: var(--home-radius);
-      padding: 20px;
-      box-shadow: var(--home-shadow);
-      color: var(--home-text);
+      gap: 12px;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
     }
 
-    .card.app-card:hover,
-    .card.app-card:focus-within {
-      transform: translateY(-2px);
-      border-color: rgba(124, 58, 237, 0.35);
-      box-shadow: 0 18px 50px rgba(17, 24, 39, 0.1);
+    .app-card:hover,
+    .app-card:focus-within {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.35);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.14);
     }
+
+    .thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: linear-gradient(135deg, #eef2ff, #e0f2fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: #0ea5e9;
+      color: #fff;
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .badge.neutral { background: #e2e8f0; color: var(--text); }
+    .badge.accent { background: var(--accent); color: #fff; }
+    .badge.updated { background: #16a34a; }
+    .badge.new { background: #f97316; }
 
     .card-header {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
     }
 
-    .icon-chip {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: #f1f5f9;
-      font-size: 1.4rem;
-    }
-
-    .pill {
-      background: var(--home-pill);
-      border: 1px solid var(--home-border);
-      color: var(--home-text);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-weight: 600;
-    }
-
-    .pill.offline {
-      background: #ecfdf3;
-      border-color: #bbf7d0;
-      color: #15803d;
-    }
-
-    .card h2 {
+    .card-title {
       margin: 0;
       font-size: 1.2rem;
+      letter-spacing: -0.01em;
     }
 
-    .card p {
+    .card-description {
       margin: 0;
-      color: var(--home-text);
+      color: var(--muted);
     }
 
-    .card .description {
-      color: var(--home-muted);
-    }
-
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 0.25rem 0 0;
+    .tag-list {
       display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      color: var(--home-text);
-    }
-
-    .feature-list li {
-      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
-      align-items: center;
-      font-weight: 600;
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .feature-list .label {
-      color: var(--home-muted);
-      font-weight: 500;
+    .tag-list li {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid #e5e7eb;
     }
 
     .card-footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      margin-top: auto;
-    }
-
-    .button.primary {
-      background: linear-gradient(135deg, #7c3aed, #6366f1);
-      color: #fff;
-      border-color: transparent;
-      padding: 10px 16px;
-      border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .meta {
-      color: var(--home-muted);
-      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 600;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
-    .skeleton {
-      background-color: #e5e7eb;
-      color: transparent;
-      border-radius: var(--home-radius);
-      animation: pulse 1.5s infinite;
-      box-shadow: var(--home-shadow);
+    .status-pill {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--accent-strong);
+      font-weight: 700;
     }
 
-    @keyframes pulse {
-      0% {
-        opacity: 0.7;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0.7;
-      }
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 0;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    .footer-links a {
+      color: var(--accent-strong);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .featured-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    .section-heading h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 640px) {
+      .controls-row { flex-direction: column; align-items: stretch; }
+      .card-footer { flex-direction: column; align-items: flex-start; }
+      .hero { padding: 24px; }
     }
   </style>
 </head>
@@ -220,131 +446,301 @@
   <div id="app-root"></div>
   <script type="module">
     import { mountShell, registerServiceWorker } from './shared/shell/shell.js';
-    import { createCard, createPill, createGrid } from './shared/ui/components.js';
     import { formatDate } from './shared/utils/format.js';
 
     document.body.classList.add('home-theme');
 
-    const iconMap = {
-      'demo-timer': '⏱️',
-      'neglect-reader': '📖',
-      'emotion-chat': '💬',
-      'cashpoint-coach': '🏧',
-      'outlook-simulation': '📧',
-      'freshmarket-budget': '🛒',
-      'metro-nav': '🗺️',
-      'cafe-rush': '☕',
-    };
+    const manifestUrl = './apps/apps.json';
+    const defaultThumb = './assets/images/thumbnails/app-placeholder.svg';
 
-    // 1. Setup the Shell
-    const { content } = mountShell({
+    const { content, frame } = mountShell({
       appTitle: 'Micro Apps',
       appTagline: 'Tiny utilities with a shared shell',
+      navLinks: [
+        { href: '#apps', label: 'Apps', current: true },
+        { href: '#featured', label: 'Featured' },
+        { href: 'https://github.com/brickfielder/micro-apps', label: 'GitHub' },
+      ],
+      includeHomeLink: false,
     });
 
-    // 2. Create Controls (Search & Filter)
-    const controlsContainer = document.createElement('div');
-    controlsContainer.className = 'controls-row';
+    const footer = frame.querySelector('.app-footer');
+    if (footer) {
+      footer.innerHTML = `
+        <div class="footer-links">
+          <span>Made for rapid learning and simulation.</span>
+          <div class="footer-actions">
+            <a href="https://github.com/brickfielder/micro-apps" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://brickfielder.github.io/micro-apps/docs" target="_blank" rel="noreferrer">About</a>
+            <a href="mailto:hello@example.com">Contact</a>
+          </div>
+        </div>
+      `;
+    }
 
-    const searchInput = document.createElement('input');
-    searchInput.type = 'search';
-    searchInput.placeholder = 'Search apps...';
-    searchInput.className = 'search-input';
-    searchInput.ariaLabel = 'Search applications';
+    const hero = document.createElement('section');
+    hero.className = 'hero';
+    hero.innerHTML = `
+      <div>
+        <p class="badge neutral">Micro Apps Library</p>
+        <h2>Launch focused training tools with a single click.</h2>
+        <p>Browse lightweight simulations, planners, and practice scenarios that open instantly in their own GitHub Pages routes. Everything is powered from one manifest for easy updates.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#apps">Explore apps</a>
+          <a class="button" href="https://github.com/brickfielder/micro-apps" target="_blank" rel="noreferrer">View on GitHub</a>
+        </div>
+        <div class="stats-row" id="hero-stats"></div>
+      </div>
+      <div>
+        <div class="controls-panel" aria-label="Quick filters">
+          <div class="controls-row">
+            <input class="search-input" type="search" placeholder="Search by name, purpose, or tag" aria-label="Search apps" />
+            <select class="select-input" aria-label="Sort apps">
+              <option value="featured">Featured first</option>
+              <option value="alpha">A to Z</option>
+              <option value="recent">Recently updated</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+          <div class="filters" aria-label="Filter by category" role="group"></div>
+          <div class="results-meta">
+            <span id="result-count">Loading apps...</span>
+            <span id="active-filter"></span>
+          </div>
+        </div>
+      </div>
+    `;
 
-    const status = document.createElement('span');
-    status.className = 'muted';
-    status.setAttribute('role', 'status'); // Better for screen readers than simple text
+    const searchInput = hero.querySelector('.search-input');
+    const sortSelect = hero.querySelector('select');
+    const filtersBar = hero.querySelector('.filters');
+    const resultCount = hero.querySelector('#result-count');
+    const activeFilter = hero.querySelector('#active-filter');
+    const statsRow = hero.querySelector('#hero-stats');
 
-    controlsContainer.append(searchInput, status);
+    content.appendChild(hero);
 
-    // 3. Create Grid
-    const grid = createGrid();
-    grid.setAttribute('aria-live', 'polite');
+    const featuredSection = document.createElement('section');
+    featuredSection.id = 'featured';
+    featuredSection.innerHTML = `
+      <div class="section-heading">
+        <h3><span class="featured-label">⭐ Featured</span></h3>
+        <p class="card-description">Curated picks to try first.</p>
+      </div>
+      <div class="card-grid" id="featured-grid"></div>
+    `;
 
-    content.append(controlsContainer, grid);
+    const appsSection = document.createElement('section');
+    appsSection.id = 'apps';
+    appsSection.innerHTML = `
+      <div class="section-heading">
+        <h3>All apps</h3>
+        <p class="card-description">Search, filter, and launch any micro experience.</p>
+      </div>
+      <div class="card-grid" id="apps-grid"></div>
+    `;
 
-    // Store apps globally for filtering
+    content.append(featuredSection, appsSection);
+
+    const featuredGrid = featuredSection.querySelector('#featured-grid');
+    const appsGrid = appsSection.querySelector('#apps-grid');
+
     let allApps = [];
+    let selectedTag = 'all';
 
-    // 4. Skeleton Loading Logic
-    function renderSkeletons(count = 4) {
-      grid.replaceChildren();
-      status.textContent = 'Loading...';
-      for (let i = 0; i < count; i++) {
-        const skeletonCard = document.createElement('div');
-        skeletonCard.className = 'card skeleton';
-        skeletonCard.style.height = '200px';
-        grid.appendChild(skeletonCard);
-      }
+    const sorters = {
+      featured: (a, b) => Number(b.featured) - Number(a.featured) || sorters.recent(a, b),
+      alpha: (a, b) => a.title.localeCompare(b.title),
+      recent: (a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated),
+      status: (a, b) => (a.status || '').localeCompare(b.status || ''),
+    };
+
+    function buildTagFilters(tags) {
+      filtersBar.replaceChildren();
+      const allButton = createTagButton('all', 'All categories');
+      filtersBar.appendChild(allButton);
+      tags.forEach((tag) => filtersBar.appendChild(createTagButton(tag, tag)));
     }
 
-    // 5. Main Logic
-    async function loadApps() {
-      renderSkeletons();
-
-      try {
-        const response = await fetch('./apps/apps.json');
-        if (!response.ok) throw new Error('Could not load apps manifest');
-
-        allApps = await response.json();
-
-        filterAndRender();
-      } catch (error) {
-        grid.replaceChildren();
-        status.textContent = 'Failed to load apps.';
-        status.setAttribute('role', 'alert');
-        console.error(error);
-      }
+    function createTagButton(value, label) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'filter-chip' + (value === selectedTag ? ' active' : '');
+      btn.textContent = label;
+      btn.dataset.value = value;
+      btn.addEventListener('click', () => {
+        selectedTag = value;
+        updateActiveFilter();
+        render();
+      });
+      return btn;
     }
 
-    // 6. Filtering & Rendering Logic
-    function filterAndRender() {
-      const query = searchInput.value.toLowerCase();
+    function updateStats(apps) {
+      statsRow.replaceChildren();
+      const total = document.createElement('span');
+      total.className = 'stat-chip';
+      total.textContent = `${apps.length} total apps`;
+      const featuredCount = document.createElement('span');
+      featuredCount.className = 'stat-chip';
+      featuredCount.textContent = `${apps.filter((a) => a.featured).length} featured`;
+      const updated = document.createElement('span');
+      updated.className = 'stat-chip';
+      updated.textContent = `${apps.filter((a) => a.badge === 'Updated' || a.badge === 'New').length} new or updated`;
+      statsRow.append(total, featuredCount, updated);
+    }
 
-      const filtered = allApps.filter((app) => {
-        const matchesText =
-          app.title.toLowerCase().includes(query) ||
-          app.description.toLowerCase().includes(query);
-        return matchesText;
+    function updateActiveFilter() {
+      activeFilter.textContent = selectedTag === 'all' ? 'Showing every category' : `Filtering by ${selectedTag}`;
+      filtersBar.querySelectorAll('.filter-chip').forEach((chip) => {
+        chip.classList.toggle('active', chip.dataset.value === selectedTag);
+      });
+    }
+
+    function createCard(app) {
+      const card = document.createElement('article');
+      card.className = 'app-card';
+      card.tabIndex = 0;
+
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb';
+      const img = document.createElement('img');
+      img.src = app.thumbnail || defaultThumb;
+      img.alt = `${app.title} preview`;
+      thumb.appendChild(img);
+
+      const badges = document.createElement('div');
+      badges.className = 'badge-row';
+      if (app.featured) {
+        const badge = document.createElement('span');
+        badge.className = 'badge accent';
+        badge.textContent = 'Featured';
+        badges.appendChild(badge);
+      }
+      if (app.badge) {
+        const badge = document.createElement('span');
+        badge.className = 'badge ' + (app.badge.toLowerCase());
+        badge.textContent = app.badge;
+        badges.appendChild(badge);
+      }
+
+      const header = document.createElement('div');
+      header.className = 'card-header';
+
+      const title = document.createElement('h3');
+      title.className = 'card-title';
+      title.textContent = app.title;
+
+      const status = document.createElement('span');
+      status.className = 'status-pill';
+      status.textContent = app.status || 'Ready';
+
+      header.append(title, status);
+
+      const description = document.createElement('p');
+      description.className = 'card-description';
+      description.textContent = app.description;
+
+      const tags = document.createElement('ul');
+      tags.className = 'tag-list';
+      (app.tags || []).forEach((tag) => {
+        const item = document.createElement('li');
+        item.textContent = tag;
+        tags.appendChild(item);
       });
 
-      renderApps(filtered);
-      status.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} found`;
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const version = document.createElement('span');
+      version.textContent = `v${app.version || '1.0'}`;
+      const updated = document.createElement('span');
+      updated.textContent = `Updated ${formatDate(app.lastUpdated)}`;
+      meta.append(version, updated);
+
+      const footer = document.createElement('div');
+      footer.className = 'card-footer';
+      const offline = document.createElement('span');
+      offline.className = 'badge neutral';
+      offline.textContent = app.offlineCapable ? 'Offline ready' : 'Online only';
+
+      const launch = document.createElement('a');
+      launch.className = 'button primary';
+      launch.href = app.entryPath;
+      launch.target = '_blank';
+      launch.rel = 'noreferrer';
+      launch.textContent = 'Launch app';
+
+      footer.append(offline, launch);
+
+      card.append(thumb, badges, header, description, tags, meta, footer);
+
+      return card;
+    }
+
+    function renderFeatured(apps) {
+      featuredGrid.replaceChildren();
+      const featuredApps = apps.filter((app) => app.featured);
+      featuredSection.style.display = featuredApps.length ? 'block' : 'none';
+      featuredApps.slice(0, 4).forEach((app) => featuredGrid.appendChild(createCard(app)));
     }
 
     function renderApps(apps) {
-      grid.replaceChildren();
-
-      if (apps.length === 0) {
-        const emptyState = document.createElement('div');
-        emptyState.textContent = 'No apps found matching your search.';
-        emptyState.className = 'muted';
-        grid.appendChild(emptyState);
+      appsGrid.replaceChildren();
+      if (!apps.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'No apps match this search or filter yet.';
+        appsGrid.appendChild(empty);
         return;
       }
-
-      apps.forEach((app) => {
-        const primaryTag = (app.tags && app.tags[0]) || 'Focus';
-        const icon = iconMap[app.slug] || '✨';
-
-        const card = createCard({
-          title: app.title,
-          description: app.description,
-          href: app.entryPath,
-          icon,
-          tag: primaryTag,
-          offline: app.offlineCapable,
-          version: app.version,
-          updated: formatDate(app.lastUpdated),
-        });
-
-        grid.appendChild(card);
-      });
+      apps.forEach((app) => appsGrid.appendChild(createCard(app)));
     }
 
-    // 7. Event Listeners
-    searchInput.addEventListener('input', filterAndRender);
+    function render() {
+      const query = searchInput.value.toLowerCase();
+      const sortKey = sortSelect.value;
+
+      const filtered = allApps.filter((app) => {
+        const matchesQuery =
+          app.title.toLowerCase().includes(query) ||
+          app.description.toLowerCase().includes(query) ||
+          (app.tags || []).some((tag) => tag.toLowerCase().includes(query));
+        const matchesTag = selectedTag === 'all' || (app.tags || []).includes(selectedTag);
+        return matchesQuery && matchesTag;
+      });
+
+      const sorted = [...filtered].sort(sorters[sortKey] || sorters.featured);
+
+      resultCount.textContent = `${filtered.length} app${filtered.length === 1 ? '' : 's'} shown`;
+      renderFeatured(sorted);
+      renderApps(sorted);
+      updateActiveFilter();
+    }
+
+    async function loadApps() {
+      try {
+        const response = await fetch(manifestUrl);
+        if (!response.ok) throw new Error('Could not load apps manifest');
+        allApps = await response.json();
+
+        const uniqueTags = Array.from(new Set(allApps.flatMap((app) => app.tags || []))).sort();
+        buildTagFilters(uniqueTags);
+        updateActiveFilter();
+        updateStats(allApps);
+        render();
+      } catch (error) {
+        console.error(error);
+        resultCount.textContent = 'Failed to load apps';
+        const errorState = document.createElement('div');
+        errorState.className = 'empty-state';
+        errorState.textContent = 'The manifest could not be loaded. Please try again later.';
+        appsGrid.replaceChildren(errorState);
+        featuredGrid.replaceChildren();
+      }
+    }
+
+    searchInput.addEventListener('input', render);
+    sortSelect.addEventListener('change', render);
 
     loadApps();
     registerServiceWorker();
