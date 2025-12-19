@@ -1,6 +1,12 @@
 const BRAND_HOME = './index.html';
 
-export function mountShell({ appTitle, appTagline = '', navLinks = [], includeHomeLink = true }) {
+export function mountShell({
+  appTitle,
+  appTagline = '',
+  navLinks = [],
+  includeHomeLink = true,
+  includeHeader = true,
+}) {
   const root = document.getElementById('app-root') || document.body;
   root.innerHTML = '';
 
@@ -11,49 +17,6 @@ export function mountShell({ appTitle, appTagline = '', navLinks = [], includeHo
 
   const frame = document.createElement('div');
   frame.className = 'app-frame';
-
-  const header = document.createElement('header');
-  header.className = 'app-header';
-
-  const brand = document.createElement('div');
-  brand.className = 'app-brand';
-
-  const logo = document.createElement('div');
-  logo.className = 'app-logo';
-  logo.textContent = 'µ';
-
-  const meta = document.createElement('div');
-  meta.className = 'app-meta';
-
-  const titleEl = document.createElement('h1');
-  titleEl.textContent = appTitle;
-
-  const taglineEl = document.createElement('p');
-  taglineEl.textContent = appTagline;
-
-  meta.append(titleEl, taglineEl);
-  brand.append(logo, meta);
-
-  const nav = document.createElement('nav');
-  nav.className = 'nav-links';
-  const hasHome = navLinks.some((link) => link.href === BRAND_HOME || link.label === 'Home');
-  const links = includeHomeLink
-    ? hasHome
-      ? navLinks
-      : [{ href: BRAND_HOME, label: 'Home', current: navLinks.length === 0 }, ...navLinks]
-    : navLinks;
-
-  links.forEach((link) => {
-    const a = document.createElement('a');
-    a.href = link.href;
-    a.textContent = link.label;
-    if (link.current) {
-      a.setAttribute('aria-current', 'page');
-    }
-    nav.appendChild(a);
-  });
-
-  header.append(brand, nav);
 
   const main = document.createElement('main');
   main.id = 'main-content';
@@ -68,7 +31,57 @@ export function mountShell({ appTitle, appTagline = '', navLinks = [], includeHo
   footer.className = 'app-footer';
   footer.innerHTML = '<strong>Micro Apps</strong> · Built for GitHub Pages and offline-friendly use.';
 
-  frame.append(skip, header, main, footer);
+  const children = [skip];
+
+  if (includeHeader) {
+    const header = document.createElement('header');
+    header.className = 'app-header';
+
+    const brand = document.createElement('div');
+    brand.className = 'app-brand';
+
+    const logo = document.createElement('div');
+    logo.className = 'app-logo';
+    logo.textContent = 'µ';
+
+    const meta = document.createElement('div');
+    meta.className = 'app-meta';
+
+    const titleEl = document.createElement('h1');
+    titleEl.textContent = appTitle;
+
+    const taglineEl = document.createElement('p');
+    taglineEl.textContent = appTagline;
+
+    meta.append(titleEl, taglineEl);
+    brand.append(logo, meta);
+
+    const nav = document.createElement('nav');
+    nav.className = 'nav-links';
+    const hasHome = navLinks.some((link) => link.href === BRAND_HOME || link.label === 'Home');
+    const links = includeHomeLink
+      ? hasHome
+        ? navLinks
+        : [{ href: BRAND_HOME, label: 'Home', current: navLinks.length === 0 }, ...navLinks]
+      : navLinks;
+
+    links.forEach((link) => {
+      const a = document.createElement('a');
+      a.href = link.href;
+      a.textContent = link.label;
+      if (link.current) {
+        a.setAttribute('aria-current', 'page');
+      }
+      nav.appendChild(a);
+    });
+
+    header.append(brand, nav);
+    children.push(header);
+  }
+
+  children.push(main, footer);
+
+  frame.append(...children);
   root.appendChild(frame);
 
   if (appTitle) {
