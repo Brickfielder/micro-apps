@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neglect Explorer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="hud">
+      <h1>Neglect Explorer</h1>
+      <p id="roundLabel">Round 1 · Kitchen</p>
+      <p id="timerLabel">00:00</p>
+      <p id="collectLabel">Left 0 | Right 0</p>
+      <p id="cueLabel">Cue: none</p>
+      <p class="hint">Move: ↑/W forward · ←/→ turn · T therapist panel</p>
+    </div>
+
+    <div id="softArrow" class="cue-arrow" aria-hidden="true">⬅ Scan left</div>
+    <div id="edgePulse" class="edge-pulse" aria-hidden="true"></div>
+
+    <section id="settingsPanel" class="settings hidden" aria-label="Therapist settings">
+      <h2>Therapist Settings</h2>
+      <div class="grid">
+        <label>Patient ID <input id="patientId" value="P-001" /></label>
+        <label>Session length (min) <input id="sessionMinutes" type="number" min="1" max="30" value="4" /></label>
+        <label>Difficulty
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+        <label>Cueing mode
+          <select id="cueingMode">
+            <option value="adaptive" selected>Adaptive ladder</option>
+            <option value="off">Off</option>
+            <option value="strong">Strong only</option>
+          </select>
+        </label>
+        <label>Targets count <input id="targetCount" type="number" min="4" max="20" value="8" /></label>
+        <label>Target size <input id="targetSize" type="number" min="0.2" max="1.5" step="0.05" value="0.5" /></label>
+        <label>Target contrast
+          <select id="targetContrast">
+            <option value="normal" selected>Normal</option>
+            <option value="high">High</option>
+          </select>
+        </label>
+        <label>Movement mode
+          <select id="movementMode">
+            <option value="simple" selected>Simple (forward + turn)</option>
+            <option value="forward-back">Forward/Back + turn</option>
+          </select>
+        </label>
+        <label>Snap turn
+          <select id="snapTurn">
+            <option value="on" selected>On (22.5°)</option>
+            <option value="off">Off (smooth)</option>
+          </select>
+        </label>
+        <label>Audio cues
+          <select id="audioEnabled">
+            <option value="on" selected>On</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+        <label>Seed <input id="seed" type="number" min="1" max="999999" value="202602" /></label>
+      </div>
+      <div class="panel-actions">
+        <button id="applySettings">Apply & Restart</button>
+        <button id="downloadJson">Download JSON</button>
+        <button id="downloadCsv">Download CSV</button>
+      </div>
+    </section>
+
+    <canvas id="sceneCanvas"></canvas>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

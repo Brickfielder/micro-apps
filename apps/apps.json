@@ -3,7 +3,10 @@
     "slug": "outlook-simulation",
     "title": "Outlook Simulation",
     "description": "Triage 20 inbox messages quickly and choose the best action for each.",
-    "tags": ["training", "productivity"],
+    "tags": [
+      "training",
+      "productivity"
+    ],
     "entryPath": "./apps/outlook-simulation/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
@@ -17,7 +20,10 @@
     "slug": "freshmarket-budget",
     "title": "FreshMarket Budget Shop",
     "description": "Refine budgeting and substitution choices while completing a family meal list.",
-    "tags": ["cognition", "planning"],
+    "tags": [
+      "cognition",
+      "planning"
+    ],
     "entryPath": "./apps/freshmarket-budget/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
@@ -31,7 +37,10 @@
     "slug": "metro-nav",
     "title": "Metro Nav",
     "description": "Plan a multi-leg city journey while balancing time, budget, and memory of the route.",
-    "tags": ["navigation", "memory"],
+    "tags": [
+      "navigation",
+      "memory"
+    ],
     "entryPath": "./apps/metro-nav/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
@@ -42,9 +51,12 @@
   },
   {
     "slug": "cafe-rush",
-    "title": "Café Rush: Bar Mode",
-    "description": "Assemble hot and iced café drinks quickly while the ticket rail keeps rolling.",
-    "tags": ["training", "speed"],
+    "title": "Caf\u00e9 Rush: Bar Mode",
+    "description": "Assemble hot and iced caf\u00e9 drinks quickly while the ticket rail keeps rolling.",
+    "tags": [
+      "training",
+      "speed"
+    ],
     "entryPath": "./apps/cafe-rush/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
@@ -58,13 +70,34 @@
     "slug": "inbox-simulator",
     "title": "Inbox Simulator",
     "description": "Practice responding to realistic inbox scenarios with live tone, spelling, and goal guidance.",
-    "tags": ["training", "communication"],
+    "tags": [
+      "training",
+      "communication"
+    ],
     "entryPath": "./apps/inbox-simulator/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2025-12-18",
     "status": "Stable",
     "featured": true,
+    "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
+  },
+  {
+    "slug": "neglect-explorer",
+    "title": "Neglect Explorer",
+    "description": "Rehab-focused 3D exploration in Kitchen and Garden with adaptive leftward cueing.",
+    "tags": [
+      "rehab",
+      "visuospatial",
+      "3d"
+    ],
+    "entryPath": "./apps/neglect-explorer/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2026-02-06",
+    "status": "Prototype",
+    "featured": true,
+    "badge": "New",
     "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
   }
 ]
