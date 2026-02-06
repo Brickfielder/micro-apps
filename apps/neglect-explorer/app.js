@@ -1,5 +1,3 @@
-import * as THREE from 'https://unpkg.com/three@0.161.0/build/three.module.js';
-
 const ui = {
   roundLabel: document.getElementById('roundLabel'),
   timerLabel: document.getElementById('timerLabel'),
@@ -24,6 +22,9 @@ const ui = {
   downloadCsv: document.getElementById('downloadCsv'),
 };
 
+const canvas = document.getElementById('sceneCanvas');
+const ctx = canvas.getContext('2d');
+
 const appState = {
   sessionStart: 0,
   roundStart: 0,
@@ -34,7 +35,7 @@ const appState = {
   levelData: [],
   targets: [],
   keys: {},
-  yaw: 0,
+  player: { x: 0, z: -12, yaw: 0 },
   cueCounts: { soft: 0, medium: 0, strong: 0, assist: 0 },
   lastLeftLookAt: 0,
   lastLeftCollectAt: 0,
@@ -45,41 +46,35 @@ const appState = {
   assistMode: false,
 };
 
-const clock = new THREE.Clock();
-const canvas = document.getElementById('sceneCanvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color('#17233b');
-scene.fog = new THREE.Fog('#17233b', 20, 60);
-
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 200);
-camera.position.set(0, 1.6, -12);
-
-const hemi = new THREE.HemisphereLight('#f4f7ff', '#415364', 1.15);
-scene.add(hemi);
-const sun = new THREE.DirectionalLight('#ffffff', 0.8);
-sun.position.set(6, 15, 7);
-scene.add(sun);
-
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(120, 120),
-  new THREE.MeshStandardMaterial({ color: '#293650', roughness: 0.95, metalness: 0.02 }),
-);
-ground.rotation.x = -Math.PI / 2;
-ground.position.y = 0;
-scene.add(ground);
-
-const world = new THREE.Group();
-scene.add(world);
-const decorGroup = new THREE.Group();
-const targetGroup = new THREE.Group();
-world.add(decorGroup, targetGroup);
-
 const DIFFICULTY_SPEED = { easy: 3.5, medium: 4.1, hard: 4.6 };
+const DEFAULT_LEVELS = [
+  {
+    name: 'Kitchen',
+    seedOffset: 11,
+    spawn: { x: 0, y: 1.6, z: -12, heading: 0 },
+    bounds: { minX: -16, maxX: 16, minZ: -16, maxZ: 16 },
+    decor: [
+      { type: 'counter', x: -10, z: 6, w: 4, h: 1.2, d: 2, color: '#8e7f66' },
+      { type: 'counter', x: 10, z: 6, w: 4, h: 1.2, d: 2, color: '#8e7f66' },
+      { type: 'table', x: 0, z: 2, w: 5, h: 1.0, d: 3, color: '#a38a6e' },
+      { type: 'cabinet', x: -12, z: -6, w: 2.8, h: 3, d: 1.4, color: '#a39078' },
+      { type: 'cabinet', x: 12, z: -6, w: 2.8, h: 3, d: 1.4, color: '#a39078' },
+    ],
+  },
+  {
+    name: 'Garden',
+    seedOffset: 29,
+    spawn: { x: 0, y: 1.6, z: -14, heading: 0 },
+    bounds: { minX: -18, maxX: 18, minZ: -18, maxZ: 18 },
+    decor: [
+      { type: 'hedge', x: -14, z: 0, w: 2, h: 2, d: 20, color: '#4f7d3c' },
+      { type: 'hedge', x: 14, z: 0, w: 2, h: 2, d: 20, color: '#4f7d3c' },
+      { type: 'path', x: 0, z: 0, w: 8, h: 0.12, d: 26, color: '#c7b796' },
+      { type: 'planter', x: -8, z: 7, w: 2.5, h: 1, d: 2.5, color: '#7c6552' },
+      { type: 'planter', x: 8, z: 7, w: 2.5, h: 1, d: 2.5, color: '#7c6552' },
+    ],
+  },
+];
 
 function mulberry32(seed) {
   return function rand() {
@@ -107,69 +102,41 @@ function tone(freq = 520, duration = 0.13) {
 }
 
 async function loadLevels() {
-  const files = ['./levels/kitchen.json', './levels/garden.json'];
-  const data = await Promise.all(files.map((f) => fetch(f).then((r) => r.json())));
-  appState.levelData = data;
-}
-
-function clearGroup(group) {
-  while (group.children.length) {
-    const child = group.children.pop();
-    child.geometry?.dispose?.();
-    if (Array.isArray(child.material)) child.material.forEach((m) => m.dispose?.());
-    child.material?.dispose?.();
-  }
-}
-
-function buildDecor(level) {
-  clearGroup(decorGroup);
-  for (const d of level.decor) {
-    const mesh = new THREE.Mesh(
-      new THREE.BoxGeometry(d.w, d.h, d.d),
-      new THREE.MeshStandardMaterial({ color: d.color, roughness: 0.7 }),
+  try {
+    const files = ['./levels/kitchen.json', './levels/garden.json'];
+    const data = await Promise.all(
+      files.map((f) =>
+        fetch(f).then((r) => {
+          if (!r.ok) throw new Error(`Failed to load ${f}: ${r.status}`);
+          return r.json();
+        }),
+      ),
     );
-    mesh.position.set(d.x, d.h / 2, d.z);
-    decorGroup.add(mesh);
+    appState.levelData = data;
+  } catch (err) {
+    console.warn('Falling back to embedded level data.', err);
+    appState.levelData = DEFAULT_LEVELS;
+    ui.cueLabel.textContent = 'Cue: offline level fallback active';
   }
 }
 
 function buildTargets(level) {
-  clearGroup(targetGroup);
   appState.targets = [];
   const cfg = appState.config;
   const pairCount = Math.max(2, Math.floor(cfg.targetCount / 2));
   const rand = mulberry32(Number(cfg.seed) + level.seedOffset + appState.currentRound * 31);
-  const contrast = cfg.targetContrast === 'high' ? 0.95 : 0.75;
   const baseSize = Number(cfg.targetSize);
 
   for (let i = 0; i < pairCount; i += 1) {
-    const z = THREE.MathUtils.lerp(-8, 12, rand());
-    const x = THREE.MathUtils.lerp(2.5, 10.5, rand());
-    const positions = [
-      { side: 'left', x: -x, z },
-      { side: 'right', x, z },
-    ];
-
-    positions.forEach((p) => {
-      const color = p.side === 'left' ? new THREE.Color(1, contrast * 0.5, contrast * 0.5) : new THREE.Color(0.5, 0.8, 1);
-      const mat = new THREE.MeshStandardMaterial({ color, emissive: color.clone().multiplyScalar(0.15) });
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(baseSize, 20, 20), mat);
-      mesh.position.set(p.x, baseSize + 0.05, p.z);
-      mesh.userData = { side: p.side, collected: false, baseSize };
-      targetGroup.add(mesh);
-      appState.targets.push(mesh);
-    });
+    const z = -8 + 20 * rand();
+    const x = 2.5 + 8 * rand();
+    appState.targets.push({ side: 'left', x: -x, z, size: baseSize, collected: false });
+    appState.targets.push({ side: 'right', x, z, size: baseSize, collected: false });
   }
 }
 
 function applyAssistMode(on) {
   appState.assistMode = on;
-  appState.targets.forEach((target) => {
-    if (target.userData.side !== 'left' || target.userData.collected) return;
-    const scale = on ? 1.45 : 1;
-    target.scale.setScalar(scale);
-    target.material.emissiveIntensity = on ? 1.35 : 0.35;
-  });
 }
 
 function startRound(roundIndex) {
@@ -185,10 +152,9 @@ function startRound(roundIndex) {
   appState.activeCueStage = 'none';
   appState.cueCounts = { soft: 0, medium: 0, strong: 0, assist: 0 };
 
-  camera.position.set(level.spawn.x, level.spawn.y, level.spawn.z);
-  appState.yaw = level.spawn.heading;
-  camera.rotation.set(0, appState.yaw, 0);
-  buildDecor(level);
+  appState.player.x = level.spawn.x;
+  appState.player.z = level.spawn.z;
+  appState.player.yaw = level.spawn.heading;
   buildTargets(level);
   applyAssistMode(false);
 
@@ -220,13 +186,6 @@ function restartSession() {
   startRound(0);
 }
 
-function angleDelta(a, b) {
-  let d = a - b;
-  while (d > Math.PI) d -= Math.PI * 2;
-  while (d < -Math.PI) d += Math.PI * 2;
-  return d;
-}
-
 function updateMovement(dt) {
   const speed = DIFFICULTY_SPEED[appState.config.difficulty] || 4;
   const turnPressed = appState.keys.ArrowLeft || appState.keys.ArrowRight;
@@ -235,25 +194,26 @@ function updateMovement(dt) {
     const direction = appState.keys.ArrowLeft ? 1 : -1;
     if (appState.config.snapTurn === 'on') {
       if (!appState.keys._snapLatch) {
-        appState.yaw += direction * (Math.PI / 8);
+        appState.player.yaw += direction * (Math.PI / 8);
         appState.keys._snapLatch = true;
       }
     } else {
-      appState.yaw += direction * dt * 1.8;
+      appState.player.yaw += direction * dt * 1.8;
     }
   } else {
     appState.keys._snapLatch = false;
   }
 
-  camera.rotation.y = appState.yaw;
   const forward = appState.keys.ArrowUp || appState.keys.KeyW;
   const backward = appState.config.movementMode === 'forward-back' && (appState.keys.ArrowDown || appState.keys.KeyS);
   if (forward || backward) {
-    const dir = new THREE.Vector3(0, 0, -1).applyEuler(camera.rotation).multiplyScalar(speed * dt * (forward ? 1 : -0.65));
-    camera.position.add(dir);
+    const direction = forward ? 1 : -0.65;
+    appState.player.x += Math.sin(appState.player.yaw) * speed * dt * direction;
+    appState.player.z -= Math.cos(appState.player.yaw) * speed * dt * direction;
+
     const level = appState.levelData[appState.currentRound % appState.levelData.length];
-    camera.position.x = THREE.MathUtils.clamp(camera.position.x, level.bounds.minX, level.bounds.maxX);
-    camera.position.z = THREE.MathUtils.clamp(camera.position.z, level.bounds.minZ, level.bounds.maxZ);
+    appState.player.x = Math.max(level.bounds.minX, Math.min(level.bounds.maxX, appState.player.x));
+    appState.player.z = Math.max(level.bounds.minZ, Math.min(level.bounds.maxZ, appState.player.z));
   }
 }
 
@@ -262,17 +222,19 @@ function collectTargets() {
   let right = 0;
   const now = performance.now();
   for (const target of appState.targets) {
-    if (target.userData.collected) {
-      if (target.userData.side === 'left') left += 1;
+    if (target.collected) {
+      if (target.side === 'left') left += 1;
       else right += 1;
       continue;
     }
-    const distance = camera.position.distanceTo(target.position);
+
+    const dx = appState.player.x - target.x;
+    const dz = appState.player.z - target.z;
+    const distance = Math.hypot(dx, dz);
     if (distance < 1.1) {
-      target.userData.collected = true;
-      target.visible = false;
-      tone(target.userData.side === 'left' ? 610 : 520, 0.09);
-      if (target.userData.side === 'left') {
+      target.collected = true;
+      tone(target.side === 'left' ? 610 : 520, 0.09);
+      if (target.side === 'left') {
         left += 1;
         appState.lastLeftCollectAt = now;
         appState.leftCollectionTimes.push(now);
@@ -281,13 +243,12 @@ function collectTargets() {
       }
     }
   }
-
   ui.collectLabel.textContent = `Left ${left} | Right ${right}`;
   return { left, right };
 }
 
 function orientedLeft() {
-  return Math.sin(appState.yaw) > 0.13;
+  return Math.sin(appState.player.yaw) > 0.13;
 }
 
 function triggerCue(stage) {
@@ -306,20 +267,7 @@ function triggerCue(stage) {
     tone(720, 0.2);
     setTimeout(() => ui.edgePulse.classList.remove('active'), 2800);
   }
-  if (stage === 'strong') {
-    appState.cueCounts.strong += 1;
-    const leftTarget = appState.targets.find((t) => !t.userData.collected && t.userData.side === 'left');
-    if (leftTarget) {
-      leftTarget.material.emissive.set('#ffff88');
-      leftTarget.material.emissiveIntensity = 1.4;
-      setTimeout(() => {
-        if (!leftTarget.userData.collected) {
-          leftTarget.material.emissive.set('#552222');
-          leftTarget.material.emissiveIntensity = appState.assistMode ? 1.35 : 0.35;
-        }
-      }, 2500);
-    }
-  }
+  if (stage === 'strong') appState.cueCounts.strong += 1;
   if (stage === 'assist') {
     appState.cueCounts.assist += 1;
     applyAssistMode(true);
@@ -332,7 +280,6 @@ function evaluateCues(now) {
     if (now - appState.lastLeftCollectAt > 20000) triggerCue('strong');
     return;
   }
-
   if (now - appState.lastLeftLookAt > 8000) triggerCue('soft');
   if (now - appState.lastLeftCollectAt > 15000) triggerCue('medium');
   if (now - appState.lastLeftCollectAt > 20000) triggerCue('strong');
@@ -359,7 +306,6 @@ function completeRound(collected) {
     roundDurationSec: Number(roundSeconds.toFixed(2)),
   };
   appState.rounds.push(round);
-
   startRound(appState.currentRound + 1);
 }
 
@@ -399,18 +345,79 @@ function exportCsv() {
   download(`neglect-explorer-${appState.config.patientId}.csv`, rows.join('\n'), 'text/csv');
 }
 
-function bindEvents() {
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+function worldToScreen(x, z, level) {
+  const pad = 50;
+  const w = canvas.width - pad * 2;
+  const h = canvas.height - pad * 2;
+  const sx = ((x - level.bounds.minX) / (level.bounds.maxX - level.bounds.minX)) * w + pad;
+  const sy = ((z - level.bounds.minZ) / (level.bounds.maxZ - level.bounds.minZ)) * h + pad;
+  return { x: sx, y: sy };
+}
+
+function drawScene() {
+  const level = appState.levelData[appState.currentRound % appState.levelData.length];
+  if (!level) return;
+
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, '#1b2a45');
+  grad.addColorStop(1, '#0f1728');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  level.decor.forEach((d) => {
+    const p = worldToScreen(d.x, d.z, level);
+    const scaleX = (d.w / (level.bounds.maxX - level.bounds.minX)) * (canvas.width - 100);
+    const scaleY = (d.d / (level.bounds.maxZ - level.bounds.minZ)) * (canvas.height - 100);
+    ctx.fillStyle = d.color;
+    ctx.globalAlpha = 0.85;
+    ctx.fillRect(p.x - scaleX / 2, p.y - scaleY / 2, scaleX, scaleY);
+    ctx.globalAlpha = 1;
   });
+
+  appState.targets.forEach((t) => {
+    if (t.collected) return;
+    const p = worldToScreen(t.x, t.z, level);
+    const radius = Math.max(6, t.size * 8 * (appState.assistMode && t.side === 'left' ? 1.45 : 1));
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = t.side === 'left' ? '#ff7b7b' : '#7dbdff';
+    if (appState.assistMode && t.side === 'left') {
+      ctx.shadowColor = '#ffff88';
+      ctx.shadowBlur = 18;
+    }
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  });
+
+  const player = worldToScreen(appState.player.x, appState.player.z, level);
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(player.x, player.y, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(player.x, player.y);
+  ctx.lineTo(player.x + Math.sin(appState.player.yaw) * 18, player.y - Math.cos(appState.player.yaw) * 18);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(245, 248, 255, 0.8)';
+  ctx.font = '14px Inter, sans-serif';
+  ctx.fillText('Fallback renderer active (network-safe mode)', 16, canvas.height - 20);
+}
+
+function bindEvents() {
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', resize);
+  resize();
 
   document.addEventListener('keydown', (e) => {
     appState.keys[e.code] = true;
-    if (e.code === 'KeyT') {
-      ui.settingsPanel.classList.toggle('hidden');
-    }
+    if (e.code === 'KeyT') ui.settingsPanel.classList.toggle('hidden');
   });
   document.addEventListener('keyup', (e) => {
     appState.keys[e.code] = false;
@@ -421,10 +428,11 @@ function bindEvents() {
   ui.downloadCsv.addEventListener('click', exportCsv);
 }
 
-function animate() {
+let lastFrame = performance.now();
+function animate(now) {
   requestAnimationFrame(animate);
-  const dt = Math.min(0.05, clock.getDelta());
-  const now = performance.now();
+  const dt = Math.min(0.05, (now - lastFrame) / 1000);
+  lastFrame = now;
   if (!appState.sessionStart) return;
 
   updateMovement(dt);
@@ -443,19 +451,13 @@ function animate() {
   const elapsed = Math.floor((now - appState.sessionStart) / 1000);
   ui.timerLabel.textContent = new Date(elapsed * 1000).toISOString().slice(14, 19);
 
-  if (collected.left + collected.right >= appState.targets.length) {
-    completeRound(collected);
-  }
+  if (collected.left + collected.right >= appState.targets.length) completeRound(collected);
 
-  if (maybeFinishSession()) {
-    renderer.render(scene, camera);
-    return;
-  }
-
-  renderer.render(scene, camera);
+  drawScene();
+  maybeFinishSession();
 }
 
 await loadLevels();
 bindEvents();
 restartSession();
-animate();
+requestAnimationFrame(animate);
