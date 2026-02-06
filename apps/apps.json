@@ -84,20 +84,20 @@
   },
   {
     "slug": "neglect-explorer",
-    "title": "Neglect Explorer",
-    "description": "Rehab-focused 3D exploration in Kitchen and Garden with adaptive leftward cueing.",
+    "title": "Maze Chomp",
+    "description": "Mobile-friendly Pac-Man-style maze game with touch controls, ghosts, and power pellets.",
     "tags": [
-      "rehab",
-      "visuospatial",
-      "3d"
+      "arcade",
+      "game",
+      "mobile"
     ],
     "entryPath": "./apps/neglect-explorer/index.html",
     "version": "0.1.0",
     "offlineCapable": false,
     "lastUpdated": "2026-02-06",
-    "status": "Prototype",
+    "status": "Playable",
     "featured": true,
-    "badge": "New",
+    "badge": "Remade",
     "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
   }
 ]

@@ -1,93 +1,112 @@
 :root {
   color-scheme: dark;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  --bg: #050510;
+  --card: #10182f;
+  --accent: #f6cf3f;
+  --maze: #2437aa;
+  --maze-border: #7ea3ff;
 }
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  overflow: hidden;
-  background: #0d111a;
+  min-height: 100vh;
+  background: radial-gradient(circle at 40% 10%, #161f44, var(--bg) 55%);
+  color: #eef2ff;
 }
-#sceneCanvas {
-  width: 100vw;
-  height: 100vh;
-  display: block;
-}
-.hud {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  z-index: 20;
-  background: rgba(10, 14, 24, 0.78);
-  padding: 10px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 12px;
-  backdrop-filter: blur(4px);
-}
-.hud h1 {
-  font-size: 1.1rem;
-  margin: 0 0 4px;
-}
-.hud p { margin: 4px 0; font-size: 0.88rem; }
-.hint { opacity: 0.75; max-width: 340px; }
-.settings {
-  position: fixed;
-  right: 12px;
-  top: 12px;
-  width: min(420px, 92vw);
-  max-height: calc(100vh - 24px);
-  overflow: auto;
-  z-index: 30;
-  background: rgba(11, 16, 29, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
-  padding: 14px;
-}
-.settings.hidden { display: none; }
-.grid {
+
+.game-shell {
+  min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-rows: auto 1fr auto auto;
+  justify-items: center;
+  gap: 0.8rem;
+  padding: max(0.6rem, env(safe-area-inset-top)) 0.8rem max(1rem, env(safe-area-inset-bottom));
 }
-label { display: flex; flex-direction: column; font-size: 0.8rem; gap: 4px; }
-input, select, button {
-  background: #1b2439;
-  color: #f6f8ff;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
-  padding: 8px;
+
+.hud {
+  width: min(560px, 100%);
+  background: rgba(8, 12, 26, 0.9);
+  border: 1px solid #304890;
+  border-radius: 14px;
+  padding: 0.7rem 0.9rem;
 }
-.panel-actions {
+
+.hud h1 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.stats {
   display: flex;
+  gap: 1rem;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+  margin-top: 0.35rem;
 }
-.cue-arrow {
-  position: fixed;
-  left: 50%;
-  top: 44px;
-  transform: translateX(-50%);
-  z-index: 25;
-  background: rgba(53, 120, 255, 0.9);
-  border: 1px solid #abc7ff;
-  padding: 8px 14px;
-  border-radius: 999px;
-  opacity: 0;
-  transition: opacity 0.2s;
+
+.stats p,
+.status,
+.hint {
+  margin: 0;
+  font-size: 0.95rem;
 }
-.cue-arrow.active { opacity: 1; }
-.edge-pulse {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  border-left: 8px solid transparent;
-  opacity: 0;
+
+#gameCanvas {
+  width: min(92vw, 76vh);
+  height: min(92vw, 76vh);
+  max-width: 560px;
+  max-height: 560px;
+  border-radius: 16px;
+  border: 2px solid var(--maze-border);
+  background: #080a18;
+  touch-action: none;
 }
-.edge-pulse.active {
-  border-left-color: rgba(255, 132, 132, 0.8);
-  animation: pulse 1s ease-in-out 3;
+
+.touch-controls {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  user-select: none;
 }
-@keyframes pulse {
-  0%,100% { opacity: 0; }
-  50% { opacity: 1; }
+
+.middle-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.touch-controls button {
+  min-width: 72px;
+  min-height: 56px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--card);
+  color: #f6f8ff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.touch-controls button:active {
+  transform: scale(0.97);
+  filter: brightness(1.15);
+}
+
+.restart {
+  min-width: 120px !important;
+  background: #8d2a2a !important;
+}
+
+.hint {
+  opacity: 0.82;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .game-shell {
+    gap: 1rem;
+  }
 }

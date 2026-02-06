@@ -1,33 +1,25 @@
-# Neglect Explorer
+# Maze Chomp (formerly Neglect Explorer)
 
-Browser-based rehab prototype for visuospatial neglect.
+A Pac-Man-style arcade game built for the web, tuned for mobile play.
 
 ## What it includes
-- Two 3D environments loaded from JSON level files: **Kitchen** and **Garden**.
-- Deterministic target placement using a seed value.
-- Mirrored left/right target pairs relative to the starting heading.
-- Low motion-sickness defaults: simple movement mode and snap-turn enabled.
-- Adaptive cueing ladder:
-  - Soft left arrow after 8s of no leftward orientation.
-  - Medium left-edge pulse + chime after 15s of no left-side collection.
-  - Strong left-target highlight after 20s of no left-side collection.
-  - Assist mode after prolonged struggle (boosted left target salience/size).
-- Therapist panel (`T`) for session length, difficulty, cueing mode, targets count/size/contrast, movement mode, audio, and patient ID.
-- Per-round metrics logging with local **CSV + JSON** downloads.
+- Single-screen maze with pellets, power pellets, ghosts, score, lives, and level progression.
+- Touch-first controls: directional buttons and swipe gestures on the canvas.
+- Keyboard controls for desktop testing (`Arrow keys` / `WASD`).
+- Responsive layout with large tap targets and safe-area padding for phones.
+- Restart button for instant replay.
 
 ## Controls
-- `W` / `↑`: move forward
-- `←` / `→`: turn
-- Optional (therapist setting): enable backward movement with `S` / `↓`
-- `T`: open/close therapist settings panel
+- Tap directional buttons (`▲ ◀ ▶ ▼`) to queue movement.
+- Swipe on the game board to change direction.
+- Keyboard: `W/A/S/D` or arrow keys.
 
 ## Build / Run commands
 ```bash
 # from repo root
 python -m http.server 8000
 ```
+
 Open:
 - App shell: `http://localhost:8000/`
-- Neglect Explorer directly: `http://localhost:8000/apps/neglect-explorer/`
-
-No bundler is required; Three.js is loaded as an ES module from CDN.
+- Maze Chomp directly: `http://localhost:8000/apps/neglect-explorer/`
