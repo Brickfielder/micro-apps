@@ -1,0 +1,13 @@
+{
+  "name": "Kitchen",
+  "seedOffset": 11,
+  "spawn": { "x": 0, "y": 1.6, "z": -12, "heading": 0 },
+  "bounds": { "minX": -16, "maxX": 16, "minZ": -16, "maxZ": 16 },
+  "decor": [
+    { "type": "counter", "x": -10, "z": 6, "w": 4, "h": 1.2, "d": 2, "color": "#8e7f66" },
+    { "type": "counter", "x": 10, "z": 6, "w": 4, "h": 1.2, "d": 2, "color": "#8e7f66" },
+    { "type": "table", "x": 0, "z": 2, "w": 5, "h": 1.0, "d": 3, "color": "#a38a6e" },
+    { "type": "cabinet", "x": -12, "z": -6, "w": 2.8, "h": 3, "d": 1.4, "color": "#a39078" },
+    { "type": "cabinet", "x": 12, "z": -6, "w": 2.8, "h": 3, "d": 1.4, "color": "#a39078" }
+  ]
+}
