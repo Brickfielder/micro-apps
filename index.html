@@ -6,439 +6,307 @@
   <title>Micro Apps | Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./shared/shell/shell.css" />
   <style>
     :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --border: #e5e7eb;
-      --text: #0f172a;
-      --muted: #6b7280;
-      --accent: #6366f1;
-      --accent-strong: #4f46e5;
-      --pill: #eef2ff;
-      --shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --bg: #060a1a;
+      --panel: rgba(8, 13, 32, 0.8);
+      --panel-strong: #0d1430;
+      --border: rgba(148, 163, 184, 0.28);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --brand-1: #22d3ee;
+      --brand-2: #818cf8;
+      --brand-3: #38bdf8;
+      --positive: #10b981;
       --radius: 18px;
       --radius-sm: 12px;
+      --shadow: 0 20px 60px rgba(2, 6, 23, 0.55);
       --max-width: 1200px;
-      --grid-gap: 1.25rem;
-      --transition: 160ms ease;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body.home-theme {
       margin: 0;
-      background: radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.08), transparent 30%),
-        radial-gradient(circle at 90% 10%, rgba(16, 185, 129, 0.05), transparent 28%),
-        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08), transparent 25%),
-        var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(34, 211, 238, 0.2), transparent 34%),
+        radial-gradient(circle at 90% 15%, rgba(129, 140, 248, 0.18), transparent 36%),
+        radial-gradient(circle at 40% 95%, rgba(56, 189, 248, 0.15), transparent 36%),
+        linear-gradient(180deg, #020617 0%, #060a1a 100%);
     }
 
     body.home-theme .app-frame {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 32px 20px 64px;
+      padding: 28px 20px 56px;
     }
 
-    body.home-theme header.app-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(229, 231, 235, 0.8);
-      box-shadow: 0 16px 60px rgba(15, 23, 42, 0.08);
-      border-radius: 20px;
-      padding: 20px 18px;
-      backdrop-filter: blur(12px);
-    }
-
-    body.home-theme .app-brand {
-      gap: 14px;
-    }
-
-    body.home-theme .app-logo {
-      background: linear-gradient(145deg, rgba(99, 102, 241, 0.15), rgba(14, 165, 233, 0.16));
-      color: var(--accent-strong);
-      border-color: rgba(99, 102, 241, 0.35);
-      font-weight: 700;
-    }
-
-    body.home-theme .app-meta h1 {
-      margin: 0;
-      font-size: 1.2rem;
-      letter-spacing: -0.01em;
-    }
-
-    body.home-theme .app-meta p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    body.home-theme .nav-links {
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    body.home-theme .nav-links a,
-    body.home-theme .nav-links a[aria-current='page'] {
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--text);
-      font-weight: 600;
-      transition: background var(--transition), box-shadow var(--transition);
-    }
-
-    body.home-theme .nav-links a:hover {
-      background: #eef2ff;
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.16);
-    }
-
-    body.home-theme .main-content {
+    .main-content {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(14, 165, 233, 0.12));
-      border: 1px solid rgba(99, 102, 241, 0.16);
+      position: relative;
+      overflow: hidden;
       border-radius: 28px;
-      padding: 32px 28px;
-      box-shadow: 0 18px 50px rgba(79, 70, 229, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      background:
+        linear-gradient(120deg, rgba(34, 211, 238, 0.15), rgba(129, 140, 248, 0.18)),
+        rgba(8, 13, 32, 0.72);
+      padding: 34px;
+      box-shadow: var(--shadow);
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
       align-items: center;
     }
 
-    .hero h2 {
-      font-size: 2rem;
-      letter-spacing: -0.02em;
-      margin: 0 0 0.5rem;
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      right: -80px;
+      top: -95px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.3), rgba(56, 189, 248, 0));
+      pointer-events: none;
     }
 
-    .hero p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 640px;
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.38);
+      background: rgba(56, 189, 248, 0.12);
+      color: #a5f3fc;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
     }
 
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
+    .hero h2 { margin: 0 0 8px; font-size: 2.1rem; line-height: 1.1; letter-spacing: -0.02em; }
+    .hero p { margin: 0; color: #cbd5e1; }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 
     .button {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
+      justify-content: center;
       text-decoration: none;
+      gap: 8px;
+      padding: 11px 15px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.65);
+      color: var(--text);
       font-weight: 700;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
     }
 
     .button.primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-      color: #fff;
       border: none;
-      box-shadow: 0 12px 30px rgba(99, 102, 241, 0.3);
+      background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      color: #020617;
     }
 
-    .button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
-    }
-
-    .stats-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 1.25rem;
-    }
+    .stats-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 
     .stat-chip {
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 14px;
+      border-radius: 11px;
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      background: rgba(15, 23, 42, 0.65);
+      padding: 8px 12px;
       font-weight: 700;
-      color: var(--text);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
+      font-size: 0.9rem;
     }
 
     .controls-panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      border-radius: 16px;
+      background: rgba(2, 6, 23, 0.52);
+      backdrop-filter: blur(8px);
       padding: 16px;
-      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .controls-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
+    .controls-row { display: flex; flex-wrap: wrap; gap: 10px; }
 
-    .search-input {
-      flex: 1;
-      min-width: 240px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      font-size: 1rem;
-      color: var(--text);
-    }
-
+    .search-input,
     .select-input {
-      padding: 12px 14px;
-      border-radius: 12px;
+      border-radius: 11px;
       border: 1px solid var(--border);
-      background: #f8fafc;
+      background: #0f172a;
       color: var(--text);
-      font-weight: 600;
+      padding: 11px 13px;
+      font: inherit;
     }
 
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .search-input { flex: 1; min-width: 220px; }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 9px; }
 
     .filter-chip {
       border-radius: 999px;
-      padding: 8px 14px;
       border: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--text);
+      background: #111827;
+      color: #cbd5e1;
       font-weight: 600;
+      padding: 7px 12px;
       cursor: pointer;
-      transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
     }
 
     .filter-chip.active {
-      background: var(--pill);
-      border-color: rgba(99, 102, 241, 0.4);
-      color: var(--accent-strong);
-      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.14);
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(129, 140, 248, 0.2));
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #a5f3fc;
     }
 
     .results-meta {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       color: var(--muted);
       font-weight: 600;
+      font-size: 0.95rem;
     }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .section-heading h3 { margin: 0; font-size: 1.2rem; }
+    .featured-label { color: #a5f3fc; font-weight: 800; }
+    .card-description { margin: 0; color: var(--muted); }
 
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--grid-gap);
+      gap: 1rem;
       width: 100%;
     }
 
     .app-card {
-      background: #fff;
-      border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      background: linear-gradient(155deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.72));
+      box-shadow: 0 16px 38px rgba(2, 6, 23, 0.45);
       padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      transition: transform 160ms ease, border-color 160ms ease;
     }
 
     .app-card:hover,
-    .app-card:focus-within {
-      transform: translateY(-4px);
-      border-color: rgba(99, 102, 241, 0.35);
-      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.14);
-    }
+    .app-card:focus-within { transform: translateY(-3px); border-color: rgba(56, 189, 248, 0.6); }
 
     .thumb {
-      position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
       border-radius: var(--radius-sm);
       overflow: hidden;
-      background: linear-gradient(135deg, #eef2ff, #e0f2fe);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: linear-gradient(140deg, #1e293b, #0f172a);
     }
 
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .badge-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .badge-row,
+    .tag-list,
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    .badge {
-      background: #0ea5e9;
-      color: #fff;
-      border-radius: 10px;
-      padding: 4px 10px;
-      font-size: 0.85rem;
+    .badge,
+    .tag-list li,
+    .status-pill {
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
     }
 
-    .badge.neutral { background: #e2e8f0; color: var(--text); }
-    .badge.accent { background: var(--accent); color: #fff; }
-    .badge.updated { background: #16a34a; }
-    .badge.new { background: #f97316; }
+    .badge { border: 1px solid transparent; }
+    .badge.accent { background: rgba(34, 211, 238, 0.2); color: #a5f3fc; }
+    .badge.neutral { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; }
+    .badge.updated { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .badge.new { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
+    .card-header { display: flex; justify-content: space-between; gap: 10px; }
+    .card-title { margin: 0; font-size: 1.16rem; }
 
-    .card-title {
-      margin: 0;
-      font-size: 1.2rem;
-      letter-spacing: -0.01em;
-    }
-
-    .card-description {
-      margin: 0;
-      color: var(--muted);
+    .status-pill {
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      color: #c7d2fe;
+      background: rgba(129, 140, 248, 0.14);
+      white-space: nowrap;
     }
 
     .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 4px 0 0;
-      padding: 0;
       list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
     .tag-list li {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      color: #334155;
-      font-weight: 600;
-      font-size: 0.9rem;
-      border: 1px solid #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.26);
+      background: rgba(15, 23, 42, 0.72);
+      color: #cbd5e1;
     }
+
+    .meta { color: var(--muted); font-weight: 600; font-size: 0.9rem; }
 
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-weight: 600;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .status-pill {
-      padding: 6px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(99, 102, 241, 0.25);
-      background: rgba(99, 102, 241, 0.08);
-      color: var(--accent-strong);
-      font-weight: 700;
     }
 
     .empty-state {
       text-align: center;
+      padding: 34px 12px;
+      border-radius: 14px;
+      border: 1px dashed var(--border);
       color: var(--muted);
-      padding: 40px 0;
       font-weight: 700;
+      background: rgba(15, 23, 42, 0.55);
     }
 
     .footer-links {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
+      gap: 10px;
       color: var(--muted);
     }
 
     .footer-links a {
-      color: var(--accent-strong);
+      color: #a5f3fc;
       font-weight: 700;
       text-decoration: none;
     }
 
-    .featured-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      color: var(--accent-strong);
-    }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin: 6px 0;
-    }
-
-    .section-heading h3 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
     @media (max-width: 640px) {
+      .hero { padding: 24px; }
       .controls-row { flex-direction: column; align-items: stretch; }
       .card-footer { flex-direction: column; align-items: flex-start; }
-      .hero { padding: 24px; }
     }
   </style>
 </head>
@@ -455,7 +323,7 @@
 
     const { content, frame } = mountShell({
       appTitle: 'Micro Apps',
-      appTagline: 'Tiny utilities with a shared shell',
+      appTagline: 'Small apps, polished interactions, shared shell',
       navLinks: [
         { href: '#apps', label: 'Apps', current: true },
         { href: '#featured', label: 'Featured' },
@@ -469,10 +337,10 @@
     if (footer) {
       footer.innerHTML = `
         <div class="footer-links">
-          <span>Made for rapid learning and simulation.</span>
+          <span>Built for fast practice and experimentation.</span>
           <div class="footer-actions">
             <a href="https://github.com/brickfielder/micro-apps" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="https://brickfielder.github.io/micro-apps/docs" target="_blank" rel="noreferrer">About</a>
+            <a href="https://brickfielder.github.io/micro-apps/docs" target="_blank" rel="noreferrer">Docs</a>
             <a href="mailto:hello@example.com">Contact</a>
           </div>
         </div>
@@ -483,12 +351,12 @@
     hero.className = 'hero';
     hero.innerHTML = `
       <div>
-        <p class="badge neutral">Micro Apps Library</p>
-        <h2>Launch focused training tools with a single click.</h2>
-        <p>Browse lightweight simulations, planners, and practice scenarios that open instantly in their own GitHub Pages routes. Everything is powered from one manifest for easy updates.</p>
+        <span class="kicker">✨ Refreshed Home Experience</span>
+        <h2>Discover focused mini-apps designed for quick skill building.</h2>
+        <p>Search by topic, filter by category, and launch each app in one click. The home page now highlights your best starting points with cleaner visuals and clearer metadata.</p>
         <div class="hero-actions">
           <a class="button primary" href="#apps">Explore apps</a>
-          <a class="button" href="https://github.com/brickfielder/micro-apps" target="_blank" rel="noreferrer">View on GitHub</a>
+          <a class="button" href="https://github.com/brickfielder/micro-apps" target="_blank" rel="noreferrer">View source</a>
         </div>
         <div class="stats-row" id="hero-stats"></div>
       </div>
@@ -525,8 +393,8 @@
     featuredSection.id = 'featured';
     featuredSection.innerHTML = `
       <div class="section-heading">
-        <h3><span class="featured-label">⭐ Featured</span></h3>
-        <p class="card-description">Curated picks to try first.</p>
+        <h3><span class="featured-label">⭐ Featured Apps</span></h3>
+        <p class="card-description">Best first picks for most users.</p>
       </div>
       <div class="card-grid" id="featured-grid"></div>
     `;
@@ -535,8 +403,8 @@
     appsSection.id = 'apps';
     appsSection.innerHTML = `
       <div class="section-heading">
-        <h3>All apps</h3>
-        <p class="card-description">Search, filter, and launch any micro experience.</p>
+        <h3>All Apps</h3>
+        <p class="card-description">Search, filter, and launch any available micro-app.</p>
       </div>
       <div class="card-grid" id="apps-grid"></div>
     `;
@@ -584,10 +452,10 @@
       total.textContent = `${apps.length} total apps`;
       const featuredCount = document.createElement('span');
       featuredCount.className = 'stat-chip';
-      featuredCount.textContent = `${apps.filter((a) => a.featured).length} featured`;
+      featuredCount.textContent = `${apps.filter((app) => app.featured).length} featured`;
       const updated = document.createElement('span');
       updated.className = 'stat-chip';
-      updated.textContent = `${apps.filter((a) => a.badge === 'Updated' || a.badge === 'New').length} new or updated`;
+      updated.textContent = `${apps.filter((app) => app.badge === 'Updated' || app.badge === 'New').length} new/updated`;
       statsRow.append(total, featuredCount, updated);
     }
 
@@ -620,7 +488,7 @@
       }
       if (app.badge) {
         const badge = document.createElement('span');
-        badge.className = 'badge ' + (app.badge.toLowerCase());
+        badge.className = 'badge ' + app.badge.toLowerCase();
         badge.textContent = app.badge;
         badges.appendChild(badge);
       }
@@ -672,9 +540,7 @@
       launch.textContent = 'Launch app';
 
       footer.append(offline, launch);
-
       card.append(thumb, badges, header, description, tags, meta, footer);
-
       return card;
     }
 

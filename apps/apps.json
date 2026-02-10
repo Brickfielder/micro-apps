@@ -99,23 +99,5 @@
     "featured": true,
     "badge": "Remade",
     "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
-  },
-  {
-    "slug": "neon-racer",
-    "title": "Neon Apex Rush",
-    "description": "Pseudo-3D desert kart circuit with 7 AI opponents, heavy turns, and obstacle sectors.",
-    "tags": [
-      "arcade",
-      "game",
-      "racing"
-    ],
-    "entryPath": "./apps/neon-racer/index.html",
-    "version": "0.1.0",
-    "offlineCapable": false,
-    "lastUpdated": "2026-02-07",
-    "status": "Playable",
-    "featured": true,
-    "badge": "3D Remake",
-    "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
   }
 ]
