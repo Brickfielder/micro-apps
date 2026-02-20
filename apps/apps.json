@@ -1,5 +1,23 @@
 [
   {
+    "slug": "speed-racer",
+    "title": "Speed Racer",
+    "description": "Race against 5 AIs on a realistic track.",
+    "tags": [
+      "game",
+      "racing",
+      "mobile"
+    ],
+    "entryPath": "./apps/speed-racer/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2026-02-12",
+    "status": "Beta",
+    "featured": true,
+    "badge": "New",
+    "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
+  },
+  {
     "slug": "outlook-simulation",
     "title": "Outlook Simulation",
     "description": "Triage 20 inbox messages quickly and choose the best action for each.",
