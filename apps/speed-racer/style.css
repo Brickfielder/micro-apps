@@ -1,0 +1,163 @@
+/* Game specific styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #333;
+}
+
+/* Override shell styles for fullscreen game */
+.app-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.app-header {
+  flex: 0 0 auto;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  z-index: 100;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.app-footer {
+  display: none !important; /* Hide footer for more space */
+}
+
+/* Game Styles */
+.game-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Maintain aspect ratio */
+  touch-action: none;
+  background: #444;
+}
+
+.hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  font-family: sans-serif;
+  text-shadow: 1px 1px 2px black;
+  pointer-events: none;
+  font-size: 1.2rem;
+  z-index: 10;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.touch-btn {
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  border: 2px solid white;
+  pointer-events: auto;
+  color: white;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.touch-btn:active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.view-section {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  font-family: sans-serif;
+  background: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+.view-section.active {
+  display: flex;
+}
+
+.btn {
+  padding: 15px 30px;
+  font-size: 1.5rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 30; /* Ensure clickable */
+}
+
+.btn:hover {
+  background: #0056b3;
+}
+
+.instructions {
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
