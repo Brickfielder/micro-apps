@@ -99,5 +99,22 @@
     "featured": true,
     "badge": "Remade",
     "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
+  },
+  {
+    "slug": "art-cities-crossword",
+    "title": "Parole Crociate: Città d'Arte",
+    "description": "Risolvi il cruciverba sulle città d'arte italiane: mosaici, portici, palazzi e rinascimento.",
+    "tags": [
+      "game",
+      "trivia",
+      "culture"
+    ],
+    "entryPath": "./apps/art-cities-crossword/index.html",
+    "version": "0.1.0",
+    "offlineCapable": false,
+    "lastUpdated": "2025-05-20",
+    "status": "Beta",
+    "featured": true,
+    "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
   }
 ]

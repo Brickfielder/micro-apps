@@ -1,0 +1,4 @@
+127.0.0.1 - - [21/Feb/2026 08:00:04] "GET /apps/art-cities-crossword/index.html HTTP/1.1" 200 -
+127.0.0.1 - - [21/Feb/2026 08:00:04] "GET /apps/art-cities-crossword/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [21/Feb/2026 08:00:04] "GET /shared/shell/shell.css HTTP/1.1" 200 -
+127.0.0.1 - - [21/Feb/2026 08:00:04] "GET /apps/art-cities-crossword/script.js HTTP/1.1" 200 -

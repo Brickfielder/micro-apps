@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parole Crociate: Città d'Arte</title>
+  <link rel="stylesheet" href="../../shared/shell/shell.css" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="app-root">
+    <!-- Instructions Screen -->
+    <div id="instructions-screen" class="screen">
+      <h1>Parole Crociate: Città d'Arte</h1>
+      <p>Benvenuto! Metti alla prova la tua conoscenza delle città d'arte italiane.</p>
+      <ul>
+        <li>Risolvi il cruciverba inserendo le parole orizzontali e verticali.</li>
+        <li>Clicca su una casella per selezionare la parola.</li>
+        <li>Premi "Invio" o usa i tasti freccia per muoverti.</li>
+        <li>Completa tutte le parole per vincere!</li>
+      </ul>
+      <button id="start-btn" class="primary-btn">Inizia</button>
+    </div>
+
+    <!-- Task Screen -->
+    <div id="task-screen" class="screen hidden">
+      <header class="app-header">
+        <div class="timer">Tempo: <span id="timer-display">00:00</span></div>
+        <button id="check-btn" class="secondary-btn">Controlla</button>
+      </header>
+
+      <div class="game-container">
+        <div class="clues-panel">
+          <div class="clue-section">
+            <h3>Orizzontali</h3>
+            <ul id="across-clues">
+              <!-- Clues will be injected here -->
+            </ul>
+          </div>
+          <div class="clue-section">
+            <h3>Verticali</h3>
+            <ul id="down-clues">
+              <!-- Clues will be injected here -->
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid-container">
+          <div id="crossword-grid">
+            <!-- Grid cells will be injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Screen -->
+    <div id="stats-screen" class="screen hidden">
+      <h1>Complimenti!</h1>
+      <p>Hai completato il cruciverba!</p>
+      <div class="stats-box">
+        <p>Tempo impiegato: <span id="final-time">00:00</span></p>
+        <p>Errori commessi: <span id="mistakes-count">0</span></p>
+      </div>
+      <button id="restart-btn" class="primary-btn">Gioca di nuovo</button>
+      <button id="exit-btn" class="secondary-btn">Esci</button>
+    </div>
+  </div>
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
