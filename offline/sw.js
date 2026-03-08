@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `micro-apps-${CACHE_VERSION}`;
 const OFFLINE_URL = './offline/offline.html';
 

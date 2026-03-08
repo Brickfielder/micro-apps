@@ -81,5 +81,23 @@
     "status": "Stable",
     "featured": true,
     "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
+  },
+  {
+    "slug": "mail-workflow-simulator",
+    "title": "Mail Workflow Simulator",
+    "description": "Handle one mixed inbox with triage decisions, phishing checks, and coached reply drafting.",
+    "tags": [
+      "training",
+      "communication",
+      "productivity"
+    ],
+    "entryPath": "./apps/mail-workflow-simulator/index.html",
+    "version": "0.1.0",
+    "offlineCapable": true,
+    "lastUpdated": "2026-03-08",
+    "status": "Pilot",
+    "featured": true,
+    "badge": "Merged",
+    "thumbnail": "./assets/images/thumbnails/app-placeholder.svg"
   }
 ]
